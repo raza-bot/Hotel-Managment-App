@@ -3,7 +3,7 @@
 **Members**
 
         Name                             Email
-     Raza Ghulam                 ahmed.abdali001@gmail.com
+     Raza Ghulam                 ahmad.abdali001@gmail.com
      Kevin Pham                  phambamkevin@gmail.com  
      Bronsin Benyamin Pouran     benyaminbronsin@gmail.com
 
