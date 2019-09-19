@@ -1,9 +1,90 @@
-Three-Tier Database Application
-Project Proposal for
+Three-Tier Database Application 
+
+
+Project Proposal for 
 Hotel Management System (HMS)
+
+
+
 San Jose State University
+
+
 CS 157A - Introduction to Database Management Systems
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 CS157A-Team 13
+
+
 Raza Ghulam, Kevin Pham, Bronsin Benyamin Pouran
+
+
 Dr. Mike Wu
+
+
 Fall 2019
+________________
+
+
+Introduction
+Nowadays everyone has their own list of vacation destinations in mind, whether it be Cancun, the Bahamas, or the Caribbean. With so many people wanting to travel, hotels have been a classic way for vacationers to reside at while away from home. In a way, hotels are “home away from home.” With that being said, it is crucial that hotel owners are able to manage their business in a clear, simple and easy manner. In addition, the booking process should be stress-free for customers who wish to stay at a hotel. For this project, we propose the development of a 3-tier architecture application that serves both the hotel owners and hotel clients. The application will take into consideration the management aspects associated with running a business, such as inventory and room availability while also factoring in the clients’ needs to have a simple and concise way of booking a room. 
+
+
+Objectives 
+* To provide a simple and easy to use application that provides manager and user functions to both hotel staff and clients respectively.
+* Include a realistic web interface for this application
+* For manager functions, be able to manage expenses, revenue, inventory, staff, and services.
+* For client functions, be able to view room availability, room services, and rooming fees.
+
+
+
+
+Target Audiences
+* Hotel Owners - Owners need a clear and simple way to manage the hotel that they are responsible for.
+* Clients & Customers - Clients want an easy, stress-free way to book and room and have their needs catered to. 
+* Employees & Staff - Staff need to know their pay rates and schedules. 
+
+
+System Environment  
+
+
+* Presentation Layer: Users will use their preferred device and web browser to interact with the website that will be presented using HTML and CSS.
+* Logic Layer: Apache web server will be used with server-side language, PHP.
+* Data Layer: MySQL will be used to create, store, retrieve and manipulate tables and data from.
+
+
+Functional Requirements
+The hotel management system is supposed to accomplish the following:
+* User authentication and authorization: The HMS will only allow authorized users to login in and access the database. 
+* Search for an available room: The database will allow the user to search for available rooms 
+* Room reservation: The application will allow the user to reserve the available room to a particular client. The client details will be saved for possible future use and the database records shall update simultaneously. 
+* Add payment: Allow the user to put the client’s credit or debit card information. The application will validate input data and saves the information into the database. 
+* Manage rooms: The system will keep track of reserved and booked rooms. Meanwhile, the database will allow the user to add, delete and update rooms in the system. 
+* Record and maintain inventory: The database will allow the user to add, delete and update the hotel inventory table. It will also keep a record of total hotel supplies and goods. 
+* Provide Price Update: The database will allow the clients to look at various rooms and their pricing. 
+* Manage Staff: The database will maintain a complete record of staff including their payment, work hours, income statement and etc. 
+* Update Clients through Email Notification: The database will send booking details right after the client books it. It will also notify the clients a couple of hours before checkout. 
+
+Nonfunctional Issues
+Nonfunctional Requirements (NFRs) define system attributes such as security, reliability, performance, maintainability, scalability, and usability. For our HMS application, we will mainly focus on secure software tools to build our GUI and ensure database secure access. To make the database secure and reliable, we will take the following steps: 
+   * UI Software: HTML and CSS will be used to create the User Interface of the website
+   * Security and Access Control: 
+   * Login credentials with hashed passwords will be stored in the database.
+   * Passwords will be validated to check if they follow certain requirements to make them strong.
+   * Personal information such as full name, email and payment methods will be stored in the Database.
+   * Personal information specific to employees such as address, salary, job position and phone number will be stored in the database.
+   * Data displayed and functionality will depend on the type of account a user has. A user who is a customer can’t access employee salary data or an employee can’t change his/her own salary.
+   * Availability: The HMS should work with all modern web browsers and devices.
