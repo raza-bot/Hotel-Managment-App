@@ -1,3 +1,9 @@
-Hi guys. 
-Bronsin Here
-Kevin Here
+Three-Tier Database Application
+Project Proposal for
+Hotel Management System (HMS)
+San Jose State University
+CS 157A - Introduction to Database Management Systems
+CS157A-Team 13
+Raza Ghulam, Kevin Pham, Bronsin Benyamin Pouran
+Dr. Mike Wu
+Fall 2019
