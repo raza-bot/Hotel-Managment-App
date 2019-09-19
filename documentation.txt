@@ -1,4 +1,4 @@
-Three-Tier Database Application 
+﻿Three-Tier Database Application 
 
 
 Project Proposal for 
@@ -88,3 +88,5 @@ Nonfunctional Requirements (NFRs) define system attributes such as security, rel
    * Personal information specific to employees such as address, salary, job position and phone number will be stored in the database.
    * Data displayed and functionality will depend on the type of account a user has. A user who is a customer can’t access employee salary data or an employee can’t change his/her own salary.
    * Availability: The HMS should work with all modern web browsers and devices.
+
+Testing Branching
