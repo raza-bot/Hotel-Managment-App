@@ -1,0 +1,155 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1671\cocoasubrtf600
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fswiss\fcharset0 Helvetica-Bold;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+{\*\listtable{\list\listtemplateid1\listhybrid{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{disc\}}{\leveltext\leveltemplateid1\'01\uc0\u8226 ;}{\levelnumbers;}\fi-360\li720\lin720 }{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{hyphen\}}{\leveltext\leveltemplateid2\'01\uc0\u8259 ;}{\levelnumbers;}\fi-360\li1440\lin1440 }{\listname ;}\listid1}
+{\list\listtemplateid2\listhybrid{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{disc\}}{\leveltext\leveltemplateid101\'01\uc0\u8226 ;}{\levelnumbers;}\fi-360\li720\lin720 }{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{hyphen\}}{\leveltext\leveltemplateid102\'01\uc0\u8259 ;}{\levelnumbers;}\fi-360\li1440\lin1440 }{\listname ;}\listid2}
+{\list\listtemplateid3\listhybrid{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{disc\}}{\leveltext\leveltemplateid201\'01\uc0\u8226 ;}{\levelnumbers;}\fi-360\li720\lin720 }{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{hyphen\}}{\leveltext\leveltemplateid202\'01\uc0\u8259 ;}{\levelnumbers;}\fi-360\li1440\lin1440 }{\listname ;}\listid3}}
+{\*\listoverridetable{\listoverride\listid1\listoverridecount0\ls1}{\listoverride\listid2\listoverridecount0\ls2}{\listoverride\listid3\listoverridecount0\ls3}}
+\margl1440\margr1440\vieww28600\viewh15780\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 Three-Tier Database Application \
+\
+\
+Project Proposal for \
+Hotel Management System (HMS)\
+\
+\
+\
+San Jose State University\
+\
+\
+CS 157A - Introduction to Database Management Systems\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+CS157A-Team 13\
+\
+\
+Raza Ghulam, Kevin Pham, Bronsin Benyamin Pouran\
+\
+\
+Dr. Mike Wu\
+\
+\
+Fall 2019\
+________________\
+\
+\
+Introduction\
+Nowadays everyone has their own list of vacation destinations in mind, whether it be Cancun, the Bahamas, or the Caribbean. With so many people wanting to travel, hotels have been a classic way for vacationers to reside at while away from home. In a way, hotels are \'93home away from home.\'94 With that being said, it is crucial that hotel owners are able to manage their business in a clear, simple and easy manner. In addition, the booking process should be stress-free for customers who wish to stay at a hotel. For this project, we propose the development of a 3-tier architecture application that serves both the hotel owners and hotel clients. The application will take into consideration the management aspects associated with running a business, such as inventory and room availability while also factoring in the clients\'92 needs to have a simple and concise way of booking a room. \
+\
+\
+Objectives \
+* To provide a simple and easy to use application that provides manager and user functions to both hotel staff and clients respectively.\
+* Include a realistic web interface for this application\
+* For manager functions, be able to manage expenses, revenue, inventory, staff, and services.\
+* For client functions, be able to view room availability, room services, and rooming fees.\
+\
+\
+\
+\
+Target Audiences\
+* Hotel Owners - Owners need a clear and simple way to manage the hotel that they are responsible for.\
+* Clients & Customers - Clients want an easy, stress-free way to book and room and have their needs catered to. \
+* Employees & Staff - Staff need to know their pay rates and schedules. \
+\
+\
+System Environment  \
+\
+\
+* Presentation Layer: Users will use their preferred device and web browser to interact with the website that will be presented using HTML and CSS.\
+* Logic Layer: Apache web server will be used with server-side language, PHP.\
+* Data Layer: MySQL will be used to create, store, retrieve and manipulate tables and data from.\
+\
+\
+
+\f1\b Functional Requirements\
+
+\f0\b0 \
+The hotel management system is supposed to accomplish the following:\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f1\b \cf0 User authentication and authorization:
+\f0\b0  The system shall provide access to the  administrator, and registered members to enter the database. Administrators shall have the permission to read, write and modify the contents while member users will have only read and write permissions. The system will interact with the user as follows:\
+\pard\tx220\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li720\fi-720\pardirnatural\partightenfactor0
+\ls1\ilvl0\cf0 {\listtext	\uc0\u8226 	}User: Log in screen: User enters the email address or member number and password. \
+{\listtext	\uc0\u8226 	}System: Checks the system admin table or guest/member\'92s table and authenticate. After successful authentication, the system will authorize the user to access the contents accordingly. \
+{\listtext	\uc0\u8226 	}User: Enters incorrect email, member number or password\
+{\listtext	\uc0\u8226 	}System: Prompts that the email, member or password is incorrect and if you are not a member, please sign up. The system shall allow unlimited user attempts to log in. \
+{\listtext	\uc0\u8226 	}User: New user shall click \'91Join\'92 to become a member. \
+{\listtext	\uc0\u8226 	}System: Shall prompt the user to enter first name, last name, country, zip code, email, and password. \
+{\listtext	\uc0\u8226 	}User: Shall enter the above information. \
+{\listtext	\uc0\u8226 	}System: Will make sure that the email address is unique and does not match any existent one. After checking the uniqueness of email address, the system shall save the information in guest table and specify the user\'92s permissions. \
+\pard\tx940\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li1440\fi-1440\pardirnatural\partightenfactor0
+\ls1\ilvl1\cf0 {\listtext	\uc0\u8259 	}Alternative: (Members). After successful login, the system will allow the user to see booking history and current booking if there is any. \
+\pard\tx220\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li720\fi-720\pardirnatural\partightenfactor0
+\ls1\ilvl0\cf0 {\listtext	\uc0\u8226 	}User: Clicks log out. \
+{\listtext	\uc0\u8226 	}Systems: Removes his name from the current logged in users table. \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+
+\f1\b Search for an available room: 
+\f0\b0 The database will allow both members and non members to search for available rooms. It shall also allow the authorized user to book rooms. \
+\pard\tx220\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li720\fi-720\pardirnatural\partightenfactor0
+\ls2\ilvl0\cf0 {\listtext	\uc0\u8226 	}User: Clicks the link \'91Rooms\'92\
+{\listtext	\uc0\u8226 	}System: Displays drop down lists allowing the user to choose booking date and the room type. \
+{\listtext	\uc0\u8226 	}User: Shall choose the check-in  date, check-out date and the room type and click the view option to see desired available rooms. \
+{\listtext	\uc0\u8226 	}System: Displays the page that will allow the user to see all available rooms of his choice. The system might offer different better rates for members. \
+{\listtext	\uc0\u8226 	}User: Shall select his desired room and proceed to payment. \
+\pard\tx940\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li1440\fi-1440\pardirnatural\partightenfactor0
+\ls2\ilvl1\cf0 {\listtext	\uc0\u8259 	}Alternative: What if the hotel is fully booked. The system shall prompt the user that there is no room available for his search choice. \
+\pard\tx220\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li720\fi-720\pardirnatural\partightenfactor0
+\ls2\ilvl0\cf0 {\listtext	\uc0\u8226 	}Can also recommend closes sister hotels. \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+
+\f1\b Room reservation: 
+\f0\b0 The system will allow the members, non members, authorized users  to reserve the available room. It shall save the  client information  in the guest table for possible future use. Similarly, it shall allow the user to cancel the booking within 24 to 48 hours without cancellation fee. The user shall communicate with the systems as follows: \
+\pard\tx220\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li720\fi-720\pardirnatural\partightenfactor0
+\ls3\ilvl0\cf0 {\listtext	\uc0\u8226 	}User: Shall click the button \'91Select/Reserve\'92\
+{\listtext	\uc0\u8226 	}System: Shall display booking details and cancellation policy information\
+{\listtext	\uc0\u8226 	}User: After confirmation the booking detail, the user shall continue to the next step by clicking continue. \
+{\listtext	\uc0\u8226 	}System: For non members- Shall ask for their information such as user first name, last name, email, mailing address, billing address and payment method. In case of in person booking, the system shall allow the user to pay cash. \
+{\listtext	\uc0\u8226 	}User: Shall provide the above information and proceed to payment. \
+{\listtext	\uc0\u8226 	}System: Will ensure the correctness of user information. After confirming the validity of user input, the system shall save the clients information into the guest or member table. \
+\pard\tx940\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li1440\fi-1440\pardirnatural\partightenfactor0
+\ls3\ilvl1\cf0 {\listtext	\uc0\u8259 	}Alternative: User: Shall choose cancel current booking option.  \
+\pard\tx220\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li720\fi-720\pardirnatural\partightenfactor0
+\ls3\ilvl0\cf0 {\listtext	\uc0\u8226 	}Systems shall allow users to cancel the booking. The system shall apply the cancellation fee charges if it is after the deadline. After cancellation The systems shall update both the booked room and available room tables. Furthermore, the system shall return the remaining balance to the user and update the payment or income table. \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+\
+ \
+* Add payment: Allow the user to put the client\'92s credit or debit card information. The application will validate input data and saves the information into the database. \
+* Manage rooms: The system will keep track of reserved and booked rooms. Meanwhile, the database will allow the user to add, delete and update rooms in the system. \
+* Record and maintain inventory: The database will allow the user to add, delete and update the hotel inventory table. It will also keep a record of total hotel supplies and goods. \
+* Provide Price Update: The database will allow the clients to look at various rooms and their pricing. \
+* Manage Staff: The database will maintain a complete record of staff including their payment, work hours, income statement and etc. \
+* Update Clients through Email Notification: The database will send booking details right after the client books it. It will also notify the clients a couple of hours before checkout. \
+\
+Nonfunctional Issues\
+Nonfunctional Requirements (NFRs) define system attributes such as security, reliability, performance, maintainability, scalability, and usability. For our HMS application, we will mainly focus on secure software tools to build our GUI and ensure database secure access. To make the database secure and reliable, we will take the following steps: \
+   * UI Software: HTML and CSS will be used to create the User Interface of the website\
+   * Security and Access Control: \
+   * Login credentials with hashed passwords will be stored in the database.\
+   * Passwords will be validated to check if they follow certain requirements to make them strong.\
+   * Personal information such as full name, email and payment methods will be stored in the Database.\
+   * Personal information specific to employees such as address, salary, job position and phone number will be stored in the database.\
+   * Data displayed and functionality will depend on the type of account a user has. A user who is a customer can\'92t access employee salary data or an employee can\'92t change his/her own salary.\
+   * Availability: The HMS should work with all modern web browsers and devices.\
+}
