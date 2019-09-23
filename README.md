@@ -11,7 +11,7 @@
 
   - Development of a 3-tier architecture application 
   - Development of a realistic web application
-  ![Image of 3-tier](https://i.imgur.com/BEbQXkY.jpg)
+  ![Image of 3-tier](https://raw.githubusercontent.com/raza-bot/CS157-Team13/master/CS157-Team13-ThreeTier.PNG)
   
   _Specifics_
   
