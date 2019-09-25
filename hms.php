@@ -1,25 +1,24 @@
 <?php
     require_once 'Login.php';
 
-    $conn = new mysqli($hn, $un, $pw, $db);
-    if ($conn->connect_error) die($conn->connect_error);
+    $conn = new mysqli($hn, $un, $pw, $db); // Opens a new connection to MySQL
+    if ($conn->connect_error) die($conn->connect_error);    // Check connection to MySQL
 
-    $query = "SELECT * FROM user";
+    $query = "SELECT * FROM user"; // Select 'all' from 'user' table
 
     $result = $conn->query($query);
 
     if (!$result) {
-        echo "Something went wrong!"; 
+        echo "Something went wrong!";   // Statement so we know something didn't go as planned
     }
     else{
-
         $rows = $result->num_rows;
-        for ($j = 0; $j < $rows; $j++) 
+        for ($j = 0; $j < $rows; $j++)  // Go through each row
         {
-            $result->data_seek($j);
-            $row = $result->fetch_array(MYSQLI_NUM);
+            $result->data_seek($j);     // Get data from row
+            $row = $result->fetch_array(MYSQLI_NUM);    // Put row data into array
 
-            echo $row[0] . ", " . $row[1] . "<br><br>";
+            echo $row[0] . ", " . $row[1] . "<br><br>"; // Print result from 1st and 2nd column of current row
         };
     }
 ?>
