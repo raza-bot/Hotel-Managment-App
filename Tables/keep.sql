@@ -1,0 +1,18 @@
+use hms;
+create table keep(hotelId int, inventoryItemId int, primary key(hotelId, inventoryItemId));
+insert into keep(hotelId, inventoryItemId) values (1, 2);
+insert into keep(hotelId, inventoryItemId) values (1, 3);
+insert into keep(hotelId, inventoryItemId) values (1, 5);
+insert into keep(hotelId, inventoryItemId) values (2, 1);
+insert into keep(hotelId, inventoryItemId) values (2, 3);
+insert into keep(hotelId, inventoryItemId) values (3, 4);
+insert into keep(hotelId, inventoryItemId) values (4, 1);
+insert into keep(hotelId, inventoryItemId) values (5, 10);
+insert into keep(hotelId, inventoryItemId) values (14, 11);
+insert into keep(hotelId, inventoryItemId) values (12, 2);
+insert into keep(hotelId, inventoryItemId) values (12, 3);
+insert into keep(hotelId, inventoryItemId) values (7, 8);
+insert into keep(hotelId, inventoryItemId) values (8, 7);
+insert into keep(hotelId, inventoryItemId) values (9, 5);
+insert into keep(hotelId, inventoryItemId) values (6, 4);
+select * from keep;
