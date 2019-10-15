@@ -1,0 +1,18 @@
+use hms;
+create table have(userId int, cardNum char(16), primary key(userId, cardNum));
+insert into have(userId, cardNum) values (1, 4564914461228654);
+insert into have(userId, cardNum) values (1, 4120398623022402);
+insert into have(userId, cardNum) values (1, 4148270601126331);
+insert into have(userId, cardNum) values (2, 4159176781677926);
+insert into have(userId, cardNum) values (2, 4507542156238116);
+insert into have(userId, cardNum) values (3, 4148270601126331);
+insert into have(userId, cardNum) values (4, 4148270601126331);
+insert into have(userId, cardNum) values (5, 4507542156238116);
+insert into have(userId, cardNum) values (14, 5190620988663344);
+insert into have(userId, cardNum) values (12, 4564914461228654);
+insert into have(userId, cardNum) values (12, 4557051659435814);
+insert into have(userId, cardNum) values (7, 5364384357194734);
+insert into have(userId, cardNum) values (8, 5364384357194734);
+insert into have(userId, cardNum) values (9, 5364384357194734);
+insert into have(userId, cardNum) values (6, 5364384357194734);
+select * from have;
