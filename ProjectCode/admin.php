@@ -9,7 +9,7 @@
         if($result->num_rows){
             $row = $result->fetch_array(MYSQLI_NUM);
             $result->close();
-            $query = "SELECT * FROM Customer WHERE user_id='$row[0]'";
+            $query = "SELECT * FROM Employee WHERE userId='$row[0]'";
             $result = $conn->query($query);
             if($result->num_rows){
                 $token = hash('ripemd128', $pass);
@@ -17,7 +17,7 @@
                     echo <<<_END
                         <!-- Logout -->
                         <p>Logged in as $row[2] $row[3]!</p>
-                        <form action="index.php" method="post">
+                        <form action="admin.php" method="post">
                             <button type="submit" name="logout-submit">Logout</button>                
                         </form>
                         </div>
@@ -33,7 +33,6 @@
         }
     }
 
-    //Signs user up if everything is entered
     if(isset($_POST['SignUp'])){
         if(isset($_POST['mailuid']) && isset($_POST['username']) && isset($_POST['pwd']) && isset($_POST['first'])&& isset($_POST['last'])){
             $username = mysql_entities_fix_string($conn, $_POST['username']);
@@ -55,39 +54,50 @@
                 if($result->num_rows){
                     $row = $result->fetch_array(MYSQLI_NUM);
                     $result->close();
-                    $query = "INSERT INTO Customer(user_id, reserveNum) VALUES ('$row[0]', 0)";
+                    $admin = isset($_POST['admin']);
+                    $query = "INSERT INTO Employee(userId, isAdmin, salary) VALUES ('$row[0]', '$admin', 0)";
                     $result = $conn->query($query);
                 }
             }
         }    
     }
-
-    echo <<<_END
-    <html lang="en">
-        <head>
-            <meta charset="UTF-8">
-            <meta name=viewport content="width=device-width, intial-scale=1">
-            <title>Testing Website</title>
-            <link rel="stylesheet" href="style.css">
-        </head>
-        <body>
     
-        <header>
-            <nav class="nav-header-main">
-                <!-- Logo Image -->
-                <a class="header-logo" href="index.php">
-                    <img src="img/hotel_logo.PNG" alt="logo"> 
-                </a>   
-                <!-- Access buttons on top of page --> 
-                <ul>
-                    <li><a href="index.php">Home</a></li>
-                    <li><a href="login.inc.php">Hotels</a></li>
-                    <li><a href="contact.php">Contact</a></li> 
-                </ul> 
-            </nav>   
-                <div class="header-login">
-    _END;
+    echo <<<_END
+<html>
+<title>Admin Page</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
+<style> 
+    body, html {height: 100%}
+    .bgimg {
+      background-image: url('img/sunset.jpg');
+      min-height: 100%;
+      background-position: center;
+      background-size: cover;
+    }
+
+     div {
+      padding-top: 20px;
+      padding-right: 20px;
+      padding-bottom: 20px;
+      padding-left: 20px;
+    }
+</style>
+
+<body style="margin: 0;">
+
+<body>
+    <div class="bgimg">
+
+      <div class="topleft">
+       <p style = "color: white; font-size: 36px">
+           Hotel Admin
+       </p>
+      </div>
+
+      <div class="middle" align="center" style = "color:white">
+_END;
     //Display Logout if signed in
     try{
         if(isset($_POST['login-submit'])){
@@ -114,6 +124,24 @@
                 throw new Exception("Not Found");
             }
         }  
+        else if(isset($_POST["signup-submit"])){
+            echo <<<_END
+            <font size = "36">
+                Admin Sign Up
+            </font>
+            <hr style="width:50%">
+            <form action="admin.php" method="post">
+                <input type="text" name="first" placeholder="First Name">
+                <input type="text" name="last" placeholder="Last Name">
+                <input type="text" name="username" placeholder="Username">
+                <input type="text" name="mailuid" placeholder="Email">
+                <input type="password" name="pwd" placeholder="Password">
+                <input type="checkbox" name="admin" value="Admin">Is Admin?<br>
+                <button type="submit" name="SignUp">Sign Up</button>    
+                <button type="submit" name="backtologin">Log In</button>            
+            </form>
+            _END;
+        }
         else{
             throw new Exception("Not Login");
         }
@@ -121,43 +149,19 @@
     catch(Exception $e){
     echo <<<_END
         <!-- Login  --> 
-        <form action="index.php" method="post">
+        <font size = "36">
+             Admin Login
+        </font>
+        <hr style="width:50%">
+        <form action="admin.php" method="post">
             <input type="text" name="mailuid" placeholder="Username/Email">
             <input type="password" name="pwd" placeholder="Password">
             <button type="submit" name="login-submit">Login</button>
-            <button type="submit" name="signup-submit">Sign Up</button> 
-            <a href="admin.php">Admin</a>
+            <button type="submit" name="signup-submit">Sign Up</button>
+            <a href="index.php">Back</a>
         </form>   
         </div>
     _END;
     }
-    
-    echo "</header></body>";
-
-    //Display Sign up if user wants to signup
-    if(isset($_POST['signup-submit'])){
-        echo <<<_END
-        <!-- Logout -->
-        <body>
-        <form action="index.php" method="post">
-            <input type="text" name="first" placeholder="First Name">
-            <input type="text" name="last" placeholder="Last Name">
-            <input type="text" name="username" placeholder="Username">
-            <input type="text" name="mailuid" placeholder="Email">
-            <input type="password" name="pwd" placeholder="Password">
-            <button type="submit" name="SignUp">Sign Up</button>                
-        </form>
-        </body>
-    _END;
-    }
-    else{
-    echo <<<_END
-        <main>
-            <p>Blah Blah Blah</p>
-            <p>Test Test Test</p>
-        </main>
-    _END;
-    }
-
-    require "footer.php";
+    echo "</div></div></body></html>"
 ?>
