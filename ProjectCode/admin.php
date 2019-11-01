@@ -105,20 +105,15 @@ _END;
             $userOrEmail = mysql_entities_fix_string($conn, $_POST['mailuid']);
             $pass = mysql_entities_fix_string($conn, $_POST['pwd']);
 
-            $queryEmail = "SELECT * FROM User WHERE email='$userOrEmail'";
-            $queryUsername = "SELECT * FROM User WHERE userName='$userOrEmail'";
-            $resultEmail = $conn->query($queryEmail);
-            $resultUsername = $conn->query($queryUsername);
+            $query = "SELECT * FROM User WHERE email='$userOrEmail' OR userName='$userOrEmail'";
+            $result= $conn->query($query);
 
-            if (!$resultUsername && !$resultEmail) { 
+            if (!$result) { 
                 echo "<script type='text/javascript'>alert(\"Email or Password is Wrong!\");</script></script><noscript>Email or Password is Wrong!</noscript>";
                 throw new Exception("Not Found");
             }
-            else if($resultUsername->num_rows){
-                login($resultUsername, $pass, $conn);
-            }
-            else if($resultEmail->num_rows){
-                login($resultEmail, $pass, $conn);
+            else if($result->num_rows){
+                login($result, $pass, $conn);
             }
             else{
                 throw new Exception("Not Found");

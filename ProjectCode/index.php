@@ -4,35 +4,6 @@
     $conn = new mysqli($hn, $un, $pw, $db);
     if ($conn->connect_error) die($conn->connect_error);
 
-    //Logs user in using MySQL
-    function login($result, $pass, $conn){
-        if($result->num_rows){
-            $row = $result->fetch_array(MYSQLI_NUM);
-            $result->close();
-            $query = "SELECT * FROM Customer WHERE user_id='$row[0]'";
-            $result = $conn->query($query);
-            if($result->num_rows){
-                $token = hash('ripemd128', $pass);
-                if($token == $row[5]){
-                    echo <<<_END
-                        <!-- Logout -->
-                        <p>Logged in as $row[2] $row[3]!</p>
-                        <form action="index.php" method="post">
-                            <button type="submit" name="logout-submit">Logout</button>                
-                        </form>
-                        </div>
-                    _END;
-                }
-                else{
-                    throw new Exception("Wrong Pass");
-                }
-            }
-            else{
-                throw new Exception("Not Customer");
-            }
-        }
-    }
-
     //Signs user up if everything is entered
     if(isset($_POST['SignUp'])){
         if(isset($_POST['mailuid']) && isset($_POST['username']) && isset($_POST['pwd']) && isset($_POST['first'])&& isset($_POST['last'])){
@@ -67,7 +38,7 @@
         <head>
             <meta charset="UTF-8">
             <meta name=viewport content="width=device-width, intial-scale=1">
-            <title>Testing Website</title>
+            <title>HMS Website</title>
             <link rel="stylesheet" href="style.css">
         </head>
         <body>
@@ -80,9 +51,11 @@
                 </a>   
                 <!-- Access buttons on top of page --> 
                 <ul>
-                    <li><a href="index.php">Home</a></li>
-                    <li><a href="login.inc.php">Hotels</a></li>
+                <form action="index.php" method="post">
+                    <li><button type="submit" name="room">Home</a></li>
+                    <li><button type="submit" name="hotel">Hotels</button></li>
                     <li><a href="contact.php">Contact</a></li> 
+                </form>
                 </ul> 
             </nav>   
                 <div class="header-login">
@@ -95,20 +68,15 @@
             $userOrEmail = mysql_entities_fix_string($conn, $_POST['mailuid']);
             $pass = mysql_entities_fix_string($conn, $_POST['pwd']);
 
-            $queryEmail = "SELECT * FROM User WHERE email='$userOrEmail'";
-            $queryUsername = "SELECT * FROM User WHERE userName='$userOrEmail'";
-            $resultEmail = $conn->query($queryEmail);
-            $resultUsername = $conn->query($queryUsername);
+            $query = "SELECT * FROM User WHERE email='$userOrEmail' OR userName='$userOrEmail'";
+            $result = $conn->query($query);
 
-            if (!$resultUsername && !$resultEmail) { 
+            if (!$result) { 
                 echo "<script type='text/javascript'>alert(\"Email or Password is Wrong!\");</script></script><noscript>Email or Password is Wrong!</noscript>";
                 throw new Exception("Not Found");
             }
-            else if($resultUsername->num_rows){
-                login($resultUsername, $pass, $conn);
-            }
-            else if($resultEmail->num_rows){
-                login($resultEmail, $pass, $conn);
+            else if($result->num_rows){
+                login($result, $pass, $conn);
             }
             else{
                 throw new Exception("Not Found");
@@ -150,14 +118,41 @@
         </body>
     _END;
     }
+    else if(isset($_POST['hotel'])){
+        require "hotel_list.php";
+    }
     else{
-    echo <<<_END
-        <main>
-            <p>Blah Blah Blah</p>
-            <p>Test Test Test</p>
-        </main>
-    _END;
+        require  "room_list.php";
     }
 
     require "footer.php";
+
+    //Logs user in using MySQL
+    function login($result, $pass, $conn){
+        if($result->num_rows){
+            $row = $result->fetch_array(MYSQLI_NUM);
+            $result->close();
+            $query = "SELECT * FROM Customer WHERE user_id='$row[0]'";
+            $result = $conn->query($query);
+            if($result->num_rows){
+                $token = hash('ripemd128', $pass);
+                if($token == $row[5]){
+                    echo <<<_END
+                        <!-- Logout -->
+                        <p>Logged in as $row[2] $row[3]!</p>
+                        <form action="index.php" method="post">
+                            <button type="submit" name="logout-submit">Logout</button>                
+                        </form>
+                        </div>
+                    _END;
+                }
+                else{
+                    throw new Exception("Wrong Pass");
+                }
+            }
+            else{
+                throw new Exception("Not Customer");
+            }
+        }
+    }
 ?>
