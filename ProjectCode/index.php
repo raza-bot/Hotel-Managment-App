@@ -122,7 +122,7 @@
         require "hotel_list.php";
     }
     else{
-        require "room_list.php";
+        require  "room_list.php";
     }
 
     require "footer.php";

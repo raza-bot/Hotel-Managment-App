@@ -10,7 +10,7 @@
     $result = $conn->query($query);
 
     if (!$result) {
-        echo "Something went wrong!";   // Statement so we know something didn't go as planned
+        echo "Something went wrong!";  // Statement so we know something didn't go as planned
     }
     else{
         
