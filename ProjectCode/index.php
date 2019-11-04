@@ -43,6 +43,16 @@
         </head>
         <body>
     
+        <style>
+            button[type = submit1], [type = submit2], [type = submit3]{
+                background-color: #59CEC3;
+                margin-top: 16;
+                font-size: 23;
+                border: none;
+                font-family: Times New Roman;                font-weight: bold;
+                }
+        </style>
+        
         <header>
             <nav class="nav-header-main">
                 <!-- Logo Image -->
