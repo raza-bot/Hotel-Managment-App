@@ -64,10 +64,7 @@
                 <form action="index.php" method="post">
                     <li><button type="submit1" name="room">Home</a></li>
                     <li><button type="submit2" name="hotel">Hotels</button></li>
-                    
-                    <li><button type="submit3" name="contact">Contact</button></li>
-                    
-                    
+                    <li><button type="submit3" name="contact">Contact</button></li> 
                 </form>
                 </ul> 
             </nav>   
