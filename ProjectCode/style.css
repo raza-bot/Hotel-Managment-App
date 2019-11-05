@@ -5,8 +5,9 @@
 }
 
 button {
-  cursor: pointer;
+  cursor: pointer;       
 }
+
 
 body {
   background-color: #E3F7F5;
@@ -30,8 +31,9 @@ header {
 
 .nav-header-main {
   height: 80%;
+  width: auto;
   display: flex;
-  flex-direction: row;
+  flex-direction:row
 }
 
 .header-logo {

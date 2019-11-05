@@ -43,6 +43,16 @@
         </head>
         <body>
     
+        <style>
+            button[type = submit1], [type = submit2], [type = submit3]{
+                background-color: #59CEC3;
+                margin-top: 16;
+                font-size: 23;
+                border: none;
+                font-family: Times New Roman;                font-weight: bold;
+                }
+        </style>
+        
         <header>
             <nav class="nav-header-main">
                 <!-- Logo Image -->
@@ -52,9 +62,12 @@
                 <!-- Access buttons on top of page --> 
                 <ul>
                 <form action="index.php" method="post">
-                    <li><button type="submit" name="room">Home</a></li>
-                    <li><button type="submit" name="hotel">Hotels</button></li>
-                    <li><a href="contact.php">Contact</a></li> 
+                    <li><button type="submit1" name="room">Home</a></li>
+                    <li><button type="submit2" name="hotel">Hotels</button></li>
+                    
+                    <li><button type="submit3" name="contact">Contact</button></li>
+                    
+                    
                 </form>
                 </ul> 
             </nav>   
@@ -120,6 +133,9 @@
     }
     else if(isset($_POST['hotel'])){
         require "hotel_list.php";
+    }
+    else if(isset($_POST['contact'])){
+        require "contact.php";
     }
     else{
         require  "room_list.php";
