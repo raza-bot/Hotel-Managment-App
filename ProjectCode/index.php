@@ -4,6 +4,21 @@
     $conn = new mysqli($hn, $un, $pw, $db);
     if ($conn->connect_error) die($conn->connect_error);
 
+    session_start();
+
+    if(isset($_POST['logout-submit'])){
+        destroy_session_and_data();
+    }
+
+    if(isset($_SESSION['token'])){
+        $username = $_SESSION['username'];
+        $email = $_SESSION['email'];
+        $userid = $_SESSION['userid'];
+        $first = $_SESSION['firstname'];
+        $last = $_SESSION['lastname'];
+        $token = $_SESSION['token'];
+    }
+
     //Signs user up if everything is entered
     if(isset($_POST['SignUp'])){
         if(isset($_POST['mailuid']) && isset($_POST['username']) && isset($_POST['pwd']) && isset($_POST['first'])&& isset($_POST['last'])){
@@ -28,6 +43,12 @@
                     $result->close();
                     $query = "INSERT INTO Customer(user_id, reserveNum) VALUES ('$row[0]', 0)";
                     $result = $conn->query($query);
+                    $_SESSION['username'] = $username;
+                    $_SESSION['email'] = $email;
+                    $_SESSION['userid'] = $row[0];
+                    $_SESSION['firstname'] = $first;
+                    $_SESSION['lastname'] = $last;
+                    $_SESSION['token'] = $token;
                 }
             }
         }    
@@ -97,17 +118,22 @@
         }
     }
     catch(Exception $e){
-    echo <<<_END
-        <!-- Login  --> 
-        <form action="index.php" method="post">
-            <input type="text" name="mailuid" placeholder="Username/Email">
-            <input type="password" name="pwd" placeholder="Password">
-            <button type="submit" name="login-submit">Login</button>
-            <button type="submit" name="signup-submit">Sign Up</button> 
-            <a href="admin.php">Admin</a>
-        </form>   
-        </div>
-    _END;
+        if(isset($token)){
+            displayLoggedIn();
+        }
+        else{
+        echo <<<_END
+            <!-- Login  --> 
+            <form action="index.php" method="post">
+                <input type="text" name="mailuid" placeholder="Username/Email">
+                <input type="password" name="pwd" placeholder="Password">
+                <button type="submit" name="login-submit">Login</button>
+                <button type="submit" name="signup-submit">Sign Up</button> 
+                <a href="admin.php">Admin</a>
+            </form>   
+            </div>
+        _END;
+        }
     }
     
     echo "</header></body>";
@@ -150,14 +176,13 @@
             if($result->num_rows){
                 $token = hash('ripemd128', $pass);
                 if($token == $row[5]){
-                    echo <<<_END
-                        <!-- Logout -->
-                        <p>Logged in as $row[2] $row[3]!</p>
-                        <form action="index.php" method="post">
-                            <button type="submit" name="logout-submit">Logout</button>                
-                        </form>
-                        </div>
-                    _END;
+                    $_SESSION['username'] = $row[1];
+                    $_SESSION['email'] = $row[4];
+                    $_SESSION['userid'] = $row[0];
+                    $_SESSION['firstname'] = $row[2];
+                    $_SESSION['lastname'] = $row[3];
+                    $_SESSION['token'] = $token;
+                    displayLoggedIn();
                 }
                 else{
                     throw new Exception("Wrong Pass");
@@ -167,5 +192,16 @@
                 throw new Exception("Not Customer");
             }
         }
+    }
+
+    function displayLoggedIn(){
+        echo <<<_END
+            <!-- Logout -->
+            <form action="index.php" method="post">
+                <button type="submit" name="profile-submit">Profile</button> 
+                <button type="submit" name="logout-submit">Logout</button>                
+            </form>
+            </div>
+        _END;
     }
 ?>
