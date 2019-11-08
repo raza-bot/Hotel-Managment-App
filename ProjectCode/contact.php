@@ -11,6 +11,7 @@
       min-height: 100%;
       background-position: center;
       background-size: cover;
+      height: 100vh;    
     }
 
      div {

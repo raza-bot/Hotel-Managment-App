@@ -69,10 +69,11 @@
     
         <style>
             button[type = submit1], [type = submit2], [type = submit3]{
-                background-color: #59CEC3;
-                margin-top: 16;
-                font-size: 23;
+                background-color: rgba(89, 206, 195, 0);
+                margin-top: 10;
+                font-size: 30;
                 border: none;
+                margin-right: 30px;
                 font-family: Times New Roman;                font-weight: bold;
                 }
         </style>
@@ -93,6 +94,7 @@
                 </ul> 
             </nav>   
                 <div class="header-login">
+        
     _END;
 
     //Display Logout if signed in

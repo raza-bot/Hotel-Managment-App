@@ -1,0 +1,7 @@
+body {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(img/hotel_img.png);
+    background-position: center;
+    background-size: cover;
+    height: 100vh;
+    color: white;
+}

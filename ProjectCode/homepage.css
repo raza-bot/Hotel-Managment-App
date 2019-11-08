@@ -1,0 +1,19 @@
+body {
+  background-color: #E3F7F5;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(img/bgimg.png);
+  background-position: center;
+  background-size: cover;
+  height: 100vh;
+}
+
+
+.slogan-text-box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -25%);
+    color: white;
+    font-family: 'Pacifico';
+    font-size: 30px;
+}
+

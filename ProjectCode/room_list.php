@@ -1,20 +1,22 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <link href="https://fonts.googleapis.com/css?family=Pacifico&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="homepage.css">
 <title> Table </title>    
     <style type = "text/css">
         table{
             border-collapse: collapse;
-            width: 100%;
-            color: black;
+            width: 40%;
+            color: white;
             font-family: Times New Roman;
             font-size: 20px;
-            text-align: left;
+            text-align: left;   
                         
         }
         th{
-            color: black;
-            border-bottom: 5px solid black; 
+            color: white;
+            border-bottom: 5px solid white; 
         }
     
     </style>    
@@ -29,6 +31,9 @@
             <th>Available</th>
         </tr>
         
+        <div class="slogan-text-box">
+            <h1>A home away from home</h1>
+        </div>
     <?php
         require_once 'db_connection.php';
         require_once 'index.php';
