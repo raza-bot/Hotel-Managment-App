@@ -58,8 +58,11 @@
     <html lang="en">
         <head>
             <meta charset="UTF-8">
-            <meta name=viewport content="width=device-width, intial-scale=1">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
             <title>HMS Website</title>
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
             <link rel="stylesheet" href="style.css">
         </head>
         <body>
@@ -136,7 +139,35 @@
         }
     }
     
-    echo "</header></body>";
+    echo <<<_END
+        </header></body>
+        <!-- Modal -->
+        <div id="profileModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Profile</h4>
+                </div>
+                <div class="modal-body">
+    _END;
+    if(isset($token)){
+        echo "Full Name: $first $last<br>";
+        echo "Username: $username<br>";
+        echo "Email: $email";
+    }
+    echo <<<_END
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+                </div>
+            </div>
+        </div>
+    _END;
+
+    
 
     //Display Sign up if user wants to signup
     if(isset($_POST['signup-submit'])){
@@ -198,7 +229,7 @@
         echo <<<_END
             <!-- Logout -->
             <form action="index.php" method="post">
-                <button type="submit" name="profile-submit">Profile</button> 
+                <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#profileModal">Profile</button> 
                 <button type="submit" name="logout-submit">Logout</button>                
             </form>
             </div>
