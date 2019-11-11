@@ -20,7 +20,7 @@ body {
 }
 
 header {
-  width: calc(100% - 30px);
+  width: auto;
   height: 75px;
   padding: 0 15px;
   background-color: rgba(227, 247, 245, 0.37);
@@ -34,7 +34,7 @@ header {
   height: 80%;
   width: auto;
   display: flex;
-  flex-direction:row
+  flex-direction:row;
 }
 
 .header-logo {
