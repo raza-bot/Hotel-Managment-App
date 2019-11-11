@@ -49,6 +49,7 @@
                     $_SESSION['firstname'] = $first;
                     $_SESSION['lastname'] = $last;
                     $_SESSION['token'] = $token;
+                    header("Location: #");
                 }
             }
         }    
@@ -62,7 +63,6 @@
             <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
             <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
             <title>HMS Website</title>
-            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
             <link rel="stylesheet" href="style.css">
         </head>
         <body>
@@ -78,7 +78,7 @@
                 }
         </style>
         
-        <header>
+        <header style="box-shadow: 0px 0px 10px 3px #080808;">
             <nav class="nav-header-main">
                 <!-- Logo Image -->
                 <a class="header-logo" href="index.php">
@@ -141,33 +141,7 @@
         }
     }
     
-    echo <<<_END
-        </header></body>
-        <!-- Modal -->
-        <div id="profileModal" class="modal fade" role="dialog">
-            <div class="modal-dialog">
-                <!-- Modal content-->
-                <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Profile</h4>
-                </div>
-                <div class="modal-body">
-    _END;
-    if(isset($token)){
-        echo "Full Name: $first $last<br>";
-        echo "Username: $username<br>";
-        echo "Email: $email";
-    }
-    echo <<<_END
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div>
-                </div>
-            </div>
-        </div>
-    _END;
+    echo "</header></body>";
 
     
 
@@ -193,6 +167,9 @@
     else if(isset($_POST['contact'])){
         require "contact.php";
     }
+    else if(isset($_POST['profile-submit'])){
+        require "profile_page.php";
+    }
     else{
         require  "room_list.php";
     }
@@ -216,6 +193,7 @@
                     $_SESSION['lastname'] = $row[3];
                     $_SESSION['token'] = $token;
                     displayLoggedIn();
+                    header("Location: #");
                 }
                 else{
                     throw new Exception("Wrong Pass");
@@ -231,7 +209,7 @@
         echo <<<_END
             <!-- Logout -->
             <form action="index.php" method="post">
-                <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#profileModal">Profile</button> 
+                <button type="submit" name="profile-submit">Profile</button> 
                 <button type="submit" name="logout-submit">Logout</button>                
             </form>
             </div>
