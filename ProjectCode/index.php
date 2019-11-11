@@ -63,6 +63,7 @@
             <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
             <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
             <title>HMS Website</title>
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
             <link rel="stylesheet" href="style.css">
         </head>
         <body>
@@ -78,7 +79,7 @@
                 }
         </style>
         
-        <header style="box-shadow: 0px 0px 10px 3px #080808;">
+        <header style="box-shadow: 0px 0px 10px 3px #080808;width: auto;">
             <nav class="nav-header-main">
                 <!-- Logo Image -->
                 <a class="header-logo" href="index.php">
