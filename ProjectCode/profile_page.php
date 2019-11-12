@@ -27,6 +27,14 @@
         }
     }
 
+    if(isset($_POST['del'])){
+        $cardNum = $_POST['cardNum'];
+        $query = "DELETE FROM Payment WHERE cardNum='$cardNum'";
+        $conn->query($query);
+        $query = "DELETE FROM have WHERE cardNum='$cardNum'";
+        $conn->query($query);
+    }
+
     echo <<<_END
     <style>
     div[title='profile'] {
@@ -38,6 +46,16 @@
         box-shadow: 0px 0px 20px 3px #808080;
         padding: 20px;
     }
+    
+    div[value='content'] {
+        width: 90%;
+        margin: auto;
+        word-wrap: break-word;
+        background-color: #ffffff;
+        border-radius: 20px;
+        box-shadow: 0px 0px 3px 1px #000000;
+        padding: 20px;
+    }
     </style>
         <center>
             <h1>$first $last</h1><br>
@@ -45,6 +63,8 @@
             <h2>Email: $email</h2>
             <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#addPaymentModal">Add Payment</button>
     _END;
+
+    displayCards($conn, $userid);
 
     echo <<<_END
         </center>
@@ -78,4 +98,42 @@
         </div>
     </div>
     _END;
+
+    function displayCards($conn, $userid){
+        $query = "SELECT cardNum FROM have WHERE userid=$userid";
+        $result = $conn->query($query);
+        if($result){
+            $rows = $result->num_rows;
+            for ($j = $rows - 1; $j >= 0; $j--) 
+            {
+                $result->data_seek($j);
+                $row = $result->fetch_array(MYSQLI_NUM);
+                $query = "SELECT * FROM Payment WHERE cardNum='$row[0]'";
+                $cardResult = $conn->query($query);
+
+                if($cardResult){
+                    $card = $cardResult->fetch_array(MYSQLI_NUM);
+
+                    $number = cipher($card[1], $card[0], 'd');
+                    $cvv = cipher($card[2], $card[0], 'd');
+                    $number = substr($number, 12);
+
+                    echo <<<_END
+                    <br><br>
+                    <div value='content'>
+                    <b>Name On Card:</b> $card[0]<br><br>
+                    <b>Card Number:</b> ************$number<br><br>
+                    <b>CVV:</b> $cvv<br><br>
+                    <b><i>Expires On: $card[3]</i></b><br>
+                    <center><form action="index.php" method="post">
+                    <input type="hidden" name="delete" value="yes">
+                    <input type="hidden" name="cardNum" value="$card[1]">
+                    <input type="hidden" name="profile-submit"><br>
+                    <input name="del" type="submit" value="DELETE"></form></center>
+                    </div>
+                    _END;
+                }
+            }
+        }
+    }
 ?>
