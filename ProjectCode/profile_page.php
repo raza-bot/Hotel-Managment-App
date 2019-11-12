@@ -3,6 +3,8 @@
     $conn = new mysqli($hn, $un, $pw, $db);
     if ($conn->connect_error) die($conn->connect_error);
 
+    $userid = $_SESSION["userid"];
+
     if(isset($_POST['addpayment'])){
         if(isset($_POST['cardnum']) && isset($_POST['name']) && isset($_POST['cvv']) && isset($_POST['expire'])){
             $name = mysql_entities_fix_string($conn, $_POST['name']);
@@ -17,6 +19,10 @@
             $result = $conn->query($query);
             if(!$result){
                 echo "<script type='text/javascript'>alert(\"ERROR\");</script><noscript>ERROR</noscript>";
+            }
+            else{
+                $query = "INSERT INTO have(userid, cardNum) VALUES ('$userid', '$encNumber')";
+                $result = $conn->query($query);
             }
         }
     }
@@ -39,8 +45,6 @@
             <h2>Email: $email</h2>
             <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#addPaymentModal">Add Payment</button>
     _END;
-
-    $query = "INSERT INTO Payment(name, cardNum, cvv, expDate) VALUES ('$name', '$encNumber', '$encCvv', '$expire')";
 
     echo <<<_END
         </center>
