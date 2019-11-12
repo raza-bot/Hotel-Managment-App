@@ -17,4 +17,21 @@
         setcookie(session_name(), '', time() - 2592000, '/');
         session_destroy();
     }
+
+    //Cipher to encrypt and decypt
+    function cipher($plaintext, $key, $action = 'e' ) {
+        $output = false;
+        $cipher = "aes-128-gcm";
+
+        $ivlen = openssl_cipher_iv_length($cipher);
+        $iv = openssl_random_pseudo_bytes($ivlen);
+        if($action == 'e'){
+            $output = openssl_encrypt($plaintext, $cipher, $key, $options=0, $iv, $tag);
+        }
+        else{
+            $output = openssl_decrypt($plaintext, $cipher, $key, $options=0, $iv, $tag);
+        }
+     
+        return $output;
+    }
 ?>
