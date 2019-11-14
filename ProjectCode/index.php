@@ -90,7 +90,7 @@
                 <form action="index.php" method="post">
                     <li><button type="submit1" name="room">Home</a></li>
                     <li><button type="submit2" name="hotel">Hotels</button></li>
-                    <li><button type="submit3" name="contact">Contact</button></li> 
+                    <li><button type="submit3" name="contact">Contact</button></li>                     
                 </form>
                 </ul> 
             </nav>   
@@ -173,6 +173,9 @@
     else if(isset($_POST['profile-submit'])){
         require "profile_page.php";
     }
+    else if(isset($_POST['inventory-submit'])){
+        require "inventory.php";
+    }
     else{
         require  "room_list.php";
     }
@@ -213,7 +216,8 @@
             <!-- Logout -->
             <form action="index.php" method="post">
                 <button type="submit" name="profile-submit">Profile</button> 
-                <button type="submit" name="logout-submit">Logout</button>                
+                <button type="submit" name="logout-submit">Logout</button>    
+                <button type="submit" name="inventory-submit">Inventory</button>
             </form>
             </div>
         _END;
