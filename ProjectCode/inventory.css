@@ -1,0 +1,30 @@
+#inventory {
+    border-collapse: collapse;
+    width: 100%
+}
+
+#inventory td {
+    border: 1px solid #000;
+    padding: 8px;
+}
+
+#inventory tr:nth-child(even) {
+    background-color: #ddd;
+}
+
+#inventory tr:hover {
+    background-color: #767676
+}
+
+#inventory th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: center;
+    background-color: #bed4d4;
+    border: 1px solid #000;
+    font-size: 25px;
+}
+
+.btn{
+    display: inline;
+}
