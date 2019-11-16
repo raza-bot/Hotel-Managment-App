@@ -1,8 +1,6 @@
 <?php
     require_once 'db_connection.php';
     require_once 'utilities.php';
-    $conn = new mysqli($hn, $un, $pw, $db);
-    if ($conn->connect_error) die($conn->connect_error);
 
     session_start();
 

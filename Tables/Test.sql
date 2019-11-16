@@ -1,0 +1,10 @@
+CREATE TABLE Room (hotelID INT, roomNum SMALLINT, type VARCHAR(20), status boolean);
+select * from User;
+select * from Customer;
+select * from Employee;
+select * from Room;
+select * from Hotel;
+select * from keep;
+INSERT INTO Room(hotelID, roomNum, type, status) VALUES('1', 1, 'Single', true);
+INSERT INTO Room(hotelID, roomNum, type, status) VALUES('2', 1, 'Double', false);
+INSERT INTO Room(hotelID, roomNum, type, status) VALUES('3', 1, 'Triple', true);

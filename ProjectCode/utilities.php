@@ -20,7 +20,6 @@
 
     //Cipher to encrypt and decypt
     function cipher($plaintext, $key, $action = 'e' ) {
-
         if($action == 'e'){
             $output = my_encrypt($plaintext, $key);
         }
