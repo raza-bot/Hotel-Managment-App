@@ -1,69 +1,65 @@
-<!DOCTYPE html>
-<html>
-<head>
+<?php
+    require_once 'db_connection.php';
+    require_once 'index.php';
+
+    echo <<<_END
+    <head>
     <link href="https://fonts.googleapis.com/css?family=Pacifico&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="homepage.css">
-<title> Table </title>    
-    <style type = "text/css">
-        table{
-            border-collapse: collapse;
-            width: 40%;
-            color: white;
-            font-family: Times New Roman;
-            font-size: 20px;
-            text-align: left;   
-                        
-        }
-        th{
-            color: white;
-            border-bottom: 5px solid white; 
-        }
-    
-    </style>    
-</head>
-
-<body>
-    <table>
-        <tr>
-            <th>Hotel Number</th>
-            <th>Room Number</th>    
-            <th>Type</th>
-            <th>Available</th>
-        </tr>
         
-        <div class="slogan-text-box">
-            <h1>A home away from home</h1>
-        </div>
-    <?php
-        require_once 'db_connection.php';
-        require_once 'index.php';
-
-        $conn = new mysqli($hn, $un, $pw, $db); // Opens a new connection to MySQL
-        if ($conn->connect_error) die($conn->connect_error);    // Check connection to MySQL
-
-        $query = "SELECT * FROM Room"; // Select 'all' from 'hotel' table
-
-        $result = $conn->query($query);
-
-        if (!$result) {
-            echo "Something went wrong!";  // Statement so we know something didn't go as planned
-        }
-        else{
-
-            $rows = $result->num_rows;
-            for ($j = 0; $j < $rows; $j++)  // Go through each row
-            {
-                $result->data_seek($j);     // Get data from row
-                $row = $result->fetch_array(MYSQLI_NUM);    // Put row data into array
-
-                echo "<tr><td>" . $row[0] . "</td><td>" . $row[1] . "</td><td>" . $row[2] . "</td><td>" . $row[3] . "</td></tr>";
+        <style>
+            div[value='content'] {
+                margin: 20;
+                opacity: 90%;
+                word-wrap: break-word;
+                background-color: #ffffff;
+                border-radius: 20px;
+                box-shadow: 0px 0px 3px 1px #000000;
+                padding-top: 20px;
+                padding-bottom: 20px;
+                padding-right:10px;
+                padding-left:8px;
             }
-            echo "</table>";
+            img[value='roomimg']{
+                width: 300px;
+                height: 200px;
+                object-fit: cover;
+                border-radius: 8%;
+            }
+        </style>   
+    </head>
+    <div class="slogan-text-box">
+        <h1>A home away from home</h1>
+    </div>
+    _END;
+
+    $query = "SELECT * FROM room JOIN hotel ON room.hotelID=hotel.id;"; // Select 'all' from 'hotel' table
+
+    $result = $conn->query($query);
+
+    if (!$result) {
+        echo "Something went wrong!";  // Statement so we know something didn't go as planned
+    }
+    else{
+
+        $rows = $result->num_rows;
+        for ($j = 0; $j < $rows; $j++)  // Go through each row
+        {
+            $result->data_seek($j);     // Get data from row
+            $row = $result->fetch_array(MYSQLI_NUM);    // Put row data into array
+
+            echo <<<_END
+            <div value='content' class="row">
+                <img value='roomimg' class="col-sm-2" src="img/$row[2].jpg">
+                <div class="col-sm-7">
+                    <h2><b>$row[2]</b> at $row[5]</h2>
+                    <h4><b>Room Number:</b> $row[1]</h4>
+                    <h4><b>Address:</b> $row[6]</h4>
+                    <h3><b>Price:</b> $266</h3>
+                </div>
+                <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#addPaymentModal">Book</button>
+            </div>
+            _END;
         }
-    ?>
-        
-    </table>
-</body>
-</html>
-
-
+    }
+?>
