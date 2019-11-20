@@ -75,10 +75,19 @@
                     </div>
                     <form action="index.php" method="post">
                             <div class="modal-body" align='center'>
+                                Name: $first $last<br>
+                                Username: @$username<br>
+                                Email: $email<br><br>
                                 Adults: <input type="number" name="quantity" min="1" max="5" value=1> 
                                 Children: <input type="number" name="quantity" min="0" max="5" value=0> <br>
                                 From: <input type="date" min=$today max=$max value=$today><br>
-                                To: <input type="date" min=$today max=$max value=$today><br><br>
+                                To: <input type="date" min=$today max=$max value=$today><br>
+                                Payment: 
+                                <input name="payment" id="payment" list="browsers">
+                                <datalist id="browsers">
+                                    <option value="Card Ending w/ 3245">
+                                    <option value="Card Ending w/ 5425">
+                                </datalist><br><br>
                                 Room and Hotel Information <br>
                                 Hotel: $row[6] <br>
                                 Address: $row[7] <br>
