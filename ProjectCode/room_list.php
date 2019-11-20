@@ -74,12 +74,21 @@
                         <h4 class="modal-title">Book Hotel</h4>
                     </div>
                     <form action="index.php" method="post">
-                            <div class="modal-body">
-                                Start Date: <input type="date" min=$today max=$max value=$today>
+                            <div class="modal-body" align='center'>
+                                Adults: <input type="number" name="quantity" min="1" max="5" value=1> 
+                                Children: <input type="number" name="quantity" min="0" max="5" value=0> <br>
+                                From: <input type="date" min=$today max=$max value=$today><br>
+                                To: <input type="date" min=$today max=$max value=$today><br><br>
+                                Room and Hotel Information <br>
+                                Hotel: $row[6] <br>
+                                Address: $row[7] <br>
+                                Room Type: $row[2] <br>
+                                Room Number: $row[1] <br>
+                                Price: $$row[4] <br>
                             </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-default" name="addpayment"><b>Book</b></button>
+                            <button type="submit" class="btn btn-default" name="addpayment"><b>Confirm & Book</b></button>
                         </div>
                         </div>
                     </form>
