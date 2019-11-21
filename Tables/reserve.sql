@@ -1,6 +1,2 @@
-CREATE TABLE reserve(Customerid INT UNIQUE, StartFrom Date, TimePeriod INT, RoomNum INT); 
-INSERT INTO reserve VALUES(1001, '2019-12-31', 2, 101); 
-INSERT INTO reserve VALUES(1009, '2019-12-31', 2, 101),(1011, '2019-12-31', 5, 102),(1012, '2019-12-21', 1, 105),
-(1021, '2019-12-21', 3, 301),(1010, '2019-10-31', 2, 401),(1100, '2019-11-21', 2, 510),(1110, '2019-11-11', 2, 413),
-(1101, '2019-12-01', 3, 110),(1013, '2019-12-10', 4, 111),(1014, '2019-10-10', 3, 220),(1015, '2019-12-09', 2, 310),
-(1016, '2019-12-25', 1, 331),(1017, '2019-12-21', 6, 102),(1018, '2019-11-19', 2, 420); 
+CREATE TABLE reserve(hotelId INT, RoomNum INT, Customerid INT UNIQUE, 
+	StartFrom Date, TimePeriod INT, adults TINYINT NOT NULL, children TINYINT default 0);
