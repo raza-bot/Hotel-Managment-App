@@ -56,7 +56,7 @@
                 <img value='roomimg' class="col-sm-2" src="img/$row[2].jpg">
                 <div class="col-sm-6" style="margin: auto;">
                     <h2><b>$row[6]</b></h2>
-                    <h5>Address: <b>$row[7]</b></h5>
+                    <a href="http://maps.google.com/maps?q=<?=$row[7]?>"><h5>Address: <b>$row[7]</b></h5></a>
                     <h4>Type: <b>$row[2]</b></h4> 
                     <h4>Room Number: <b>$row[1]</b></h4>
                     <h3 style="color:Green;"><b>$$row[4]</b> <small>PER NIGHT</small></h3>
