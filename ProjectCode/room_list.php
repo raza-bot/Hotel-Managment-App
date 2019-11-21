@@ -11,7 +11,7 @@
     $to = date('Y-m-d', strtotime("+5 Days"));
 
     if(isset($_POST['searchtext'])){
-        $search = mysql_entities_fix_string($conn, $_POST['searchtext']);
+        $search = strtolower(mysql_entities_fix_string($conn, $_POST['searchtext']));
         $from = $_POST["from"];
         $to = $_POST["to"];
     }
@@ -23,17 +23,17 @@
 
     if(isset($_POST['book'])){
         if(isset($_POST["adult-quantity"]) && isset($_POST["child-quantity"]) 
-            && isset($_POST["from"]) && isset($_POST["to"]) && isset($_POST["payment"])){
+            && isset($_POST["fromBook"]) && isset($_POST["toBook"]) && isset($_POST["payment"])){
             
             $adult = $_POST["adult-quantity"];
             $children = $_POST["child-quantity"];
-            $from = $_POST["from"];
-            $to = $_POST['to'];
             $hotelid = $_POST["hotelid"];
             $roomnum = $_POST["roomnumber"];
+            $fromBook = $_POST["fromBook"];
+            $toBook = $_POST["toBook"];
 
             $query = "INSERT INTO reserve(hotelId, RoomNum, Customerid, StartFrom, EndTo, adults, children) VALUES
-                        ('$hotelid', '$roomnum', '$userid', '$from', '$to', '$adult', '$children');";
+                        ('$hotelid', '$roomnum', '$userid', '$fromBook', '$toBook', '$adult', '$children');";
 
             $result = $conn->query($query);
 
@@ -75,8 +75,8 @@
                 box-shadow: 0px 0px 3px 1px #000000;
                 padding-top: 10px;
                 padding-bottom: 10px;
-                padding-right:10px;
-                padding-left:10px;
+                padding-right:0px;
+                padding-left:0px;
             }
             img[value='roomimg']{
                 width: 300px;
@@ -109,7 +109,7 @@
     </div>
     <form action="index.php" method="post">
         <div value='search' class="row">
-            <input type="text" placeholder="Search" name="searchtext">
+            <input type="text" placeholder="Search e.g. Hotel, Room Type, Address" name="searchtext">
             <div><b style="font-size:20;">From:</b>  <input type="date" name="from" min=$from max=$max value=$from></div>
             <div><b style="font-size:20;">To:</b>  <input type="date" name="to" min=$from max=$max value=$to></div>
             <button type="submit" class="btn btn-default" name="search"><b>Search</b></button>
@@ -118,9 +118,20 @@
     
     _END;
 
-    $query = "SELECT * FROM (SELECT * FROM room JOIN hotel ON room.hotelID=hotel.id)hotel_room, reserve 
-	WHERE (hotel_room.id<>reserve.hotelId AND hotel_room.roomNum<>reserve.RoomNum)
-    OR (StartFrom>'$to' OR EndTo<'$from');"; // Select 'all' from 'hotel' table
+    $query = "SELECT * FROM reserve;";
+
+    $result = $conn->query($query);
+
+    if($result->num_rows > 0){
+        $query = "SELECT * FROM (SELECT * FROM room JOIN hotel ON room.hotelID=hotel.id WHERE 
+                LOWER(name) LIKE '%$search%' OR LOWER(type) LIKE '%$search%' OR LOWER(address) LIKE '%$search%')hotel_room
+	            WHERE (hotel_room.id NOT IN (SELECT hotelId FROM reserve) AND hotel_room.roomNum NOT IN (SELECT RoomNum FROM reserve))
+                OR id NOT IN ((SELECT hotelId as Id FROM reserve WHERE StartFrom>='$from' and StartFrom<'$to' or EndTo<='$to' and EndTo>'$from'));";
+    }
+    else{
+        $query = "SELECT * FROM room JOIN hotel ON room.hotelID=hotel.id WHERE 
+            LOWER(name) LIKE '%$search%' OR LOWER(type) LIKE '%$search%' OR LOWER(address) LIKE '%$search%'";
+    }
 
     $result = $conn->query($query);
 
@@ -169,7 +180,9 @@
                                 <datalist id="browsers">
                                     <option value="Card Ending w/ 3245">
                                     <option value="Card Ending w/ 5425">
-                                </datalist><br><br>
+                                </datalist><br>
+                                From: $from <br>
+                                To: $to <br><br>
                                 Room and Hotel Information <br>
                                 Hotel: $row[6] <br>
                                 Address: $row[7] <br>
@@ -178,6 +191,8 @@
                                 Price: $$row[4] <br>
                                 <input type="hidden" name="hotelid" value="$row[0]">
                                 <input type="hidden" name="roomnumber" value="$row[1]">
+                                <input type="hidden" name="fromBook" value="$from">
+                                <input type="hidden" name="toBook" value="$to">
                             </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
