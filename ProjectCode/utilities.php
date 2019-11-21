@@ -1,4 +1,6 @@
 <?php
+    $payment = null;
+    
     //Sanitizing Functions
     function mysql_entities_fix_string($conn, $string){
         return htmlentities(mysql_fix_string($conn, $string));

@@ -1,9 +1,49 @@
 <?php
     require_once 'db_connection.php';
+    require_once 'utilities.php';
     require_once 'index.php';
 
     $today = date('Y-m-d');
     $max = date('Y-m-d', strtotime("+6 Months"));
+
+    $search = "";
+    $from = date('Y-m-d');
+    $to = date('Y-m-d', strtotime("+5 Days"));
+
+    if(isset($_POST['searchtext'])){
+        $search = mysql_entities_fix_string($conn, $_POST['searchtext']);
+        $from = $_POST["from"];
+        $to = $_POST["to"];
+    }
+    else{
+        $search = "";
+        $from = date('Y-m-d');
+        $to = date('Y-m-d', strtotime("+5 Days"));
+    }
+
+    if(isset($_POST['book'])){
+        if(isset($_POST["adult-quantity"]) && isset($_POST["child-quantity"]) 
+            && isset($_POST["from"]) && isset($_POST["to"]) && isset($_POST["payment"])){
+            
+            $adult = $_POST["adult-quantity"];
+            $children = $_POST["child-quantity"];
+            $from = $_POST["from"];
+            $to = $_POST['to'];
+            $hotelid = $_POST["hotelid"];
+            $roomnum = $_POST["roomnumber"];
+
+            $query = "INSERT INTO reserve(hotelId, RoomNum, Customerid, StartFrom, EndTo, adults, children) VALUES
+                        ('$hotelid', '$roomnum', '$userid', '$from', '$to', '$adult', '$children');";
+
+            $result = $conn->query($query);
+
+            if(!$result){
+                echo "<script type='text/javascript'>alert(\"ERROR\");</script><noscript>ERROR</noscript>";
+            }
+        }
+    }
+
+
 
     echo <<<_END
     <head>
@@ -23,20 +63,64 @@
                 padding-right:10px;
                 padding-left:8px;
             }
+            div[value='search'] {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                margin: 20;
+                opacity: 90%;
+                word-wrap: break-word;
+                background-color: #ffffff;
+                border-radius: 20px;
+                box-shadow: 0px 0px 3px 1px #000000;
+                padding-top: 10px;
+                padding-bottom: 10px;
+                padding-right:10px;
+                padding-left:10px;
+            }
             img[value='roomimg']{
                 width: 300px;
                 height: 200px;
                 object-fit: cover;
                 border-radius: 8%;
             }
+            input[type=text]{
+                width: 50%;
+                padding: 12px;
+                border: 1px solid #ccc;
+                border-radius: 13px;
+                resize: vertical;
+            }
+            input[type=date]{
+                padding: 12px;
+                border: 1px solid #ccc;
+                border-radius: 13px;
+                resize: vertical;
+            }
+            input:focus { 
+                outline: none !important;
+                border-color: #719ECE;
+                box-shadow: 0 0 10px #719ECE;
+            }
         </style>   
     </head>
     <div class="slogan-text-box">
         <h1>A home away from home</h1>
     </div>
+    <form action="index.php" method="post">
+        <div value='search' class="row">
+            <input type="text" placeholder="Search" name="searchtext">
+            <div><b style="font-size:20;">From:</b>  <input type="date" name="from" min=$from max=$max value=$from></div>
+            <div><b style="font-size:20;">To:</b>  <input type="date" name="to" min=$from max=$max value=$to></div>
+            <button type="submit" class="btn btn-default" name="search"><b>Search</b></button>
+        </div>
+    </form>
+    
     _END;
 
-    $query = "SELECT * FROM room JOIN hotel ON room.hotelID=hotel.id;"; // Select 'all' from 'hotel' table
+    $query = "SELECT * FROM (SELECT * FROM room JOIN hotel ON room.hotelID=hotel.id)hotel_room, reserve 
+	WHERE (hotel_room.id<>reserve.hotelId AND hotel_room.roomNum<>reserve.RoomNum)
+    OR (StartFrom>'$to' OR EndTo<'$from');"; // Select 'all' from 'hotel' table
 
     $result = $conn->query($query);
 
@@ -78,10 +162,8 @@
                                 Name: $first $last<br>
                                 Username: @$username<br>
                                 Email: $email<br><br>
-                                Adults: <input type="number" name="quantity" min="1" max="5" value=1> 
-                                Children: <input type="number" name="quantity" min="0" max="5" value=0> <br>
-                                From: <input type="date" min=$today max=$max value=$today><br>
-                                To: <input type="date" min=$today max=$max value=$today><br>
+                                Adults: <input type="number" name="adult-quantity" min="1" max="5" value=1> 
+                                Children: <input type="number" name="child-quantity" min="0" max="5" value=0> <br>
                                 Payment: 
                                 <input name="payment" id="payment" list="browsers">
                                 <datalist id="browsers">
@@ -94,10 +176,12 @@
                                 Room Type: $row[2] <br>
                                 Room Number: $row[1] <br>
                                 Price: $$row[4] <br>
+                                <input type="hidden" name="hotelid" value="$row[0]">
+                                <input type="hidden" name="roomnumber" value="$row[1]">
                             </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-default" name="addpayment"><b>Confirm & Book</b></button>
+                            <button type="submit" class="btn btn-default" name="book"><b>Confirm & Book</b></button>
                         </div>
                         </div>
                     </form>
