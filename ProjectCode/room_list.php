@@ -1,9 +1,49 @@
 <?php
     require_once 'db_connection.php';
+    require_once 'utilities.php';
     require_once 'index.php';
 
     $today = date('Y-m-d');
     $max = date('Y-m-d', strtotime("+6 Months"));
+
+    $search = "";
+    $from = date('Y-m-d');
+    $to = date('Y-m-d', strtotime("+5 Days"));
+
+    if(isset($_POST['searchtext'])){
+        $search = strtolower(mysql_entities_fix_string($conn, $_POST['searchtext']));
+        $from = $_POST["from"];
+        $to = $_POST["to"];
+    }
+    else{
+        $search = "";
+        $from = date('Y-m-d');
+        $to = date('Y-m-d', strtotime("+5 Days"));
+    }
+
+    if(isset($_POST['book'])){
+        if(isset($_POST["adult-quantity"]) && isset($_POST["child-quantity"]) 
+            && isset($_POST["fromBook"]) && isset($_POST["toBook"]) && isset($_POST["payment"])){
+            
+            $adult = $_POST["adult-quantity"];
+            $children = $_POST["child-quantity"];
+            $hotelid = $_POST["hotelid"];
+            $roomnum = $_POST["roomnumber"];
+            $fromBook = $_POST["fromBook"];
+            $toBook = $_POST["toBook"];
+
+            $query = "INSERT INTO reserve(hotelId, RoomNum, Customerid, StartFrom, EndTo, adults, children) VALUES
+                        ('$hotelid', '$roomnum', '$userid', '$fromBook', '$toBook', '$adult', '$children');";
+
+            $result = $conn->query($query);
+
+            if(!$result){
+                echo "<script type='text/javascript'>alert(\"ERROR\");</script><noscript>ERROR</noscript>";
+            }
+        }
+    }
+
+
 
     echo <<<_END
     <head>
@@ -23,20 +63,75 @@
                 padding-right:10px;
                 padding-left:8px;
             }
+            div[value='search'] {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                margin: 20;
+                opacity: 90%;
+                word-wrap: break-word;
+                background-color: #ffffff;
+                border-radius: 20px;
+                box-shadow: 0px 0px 3px 1px #000000;
+                padding-top: 10px;
+                padding-bottom: 10px;
+                padding-right:0px;
+                padding-left:0px;
+            }
             img[value='roomimg']{
                 width: 300px;
                 height: 200px;
                 object-fit: cover;
                 border-radius: 8%;
             }
+            input[type=text]{
+                width: 50%;
+                padding: 12px;
+                border: 1px solid #ccc;
+                border-radius: 13px;
+                resize: vertical;
+            }
+            input[type=date]{
+                padding: 12px;
+                border: 1px solid #ccc;
+                border-radius: 13px;
+                resize: vertical;
+            }
+            input:focus { 
+                outline: none !important;
+                border-color: #719ECE;
+                box-shadow: 0 0 10px #719ECE;
+            }
         </style>   
     </head>
     <div class="slogan-text-box">
         <h1>A home away from home</h1>
     </div>
+    <form action="index.php" method="post">
+        <div value='search' class="row">
+            <input type="text" placeholder="Search e.g. Hotel, Room Type, Address" name="searchtext">
+            <div><b style="font-size:20;">From:</b>  <input type="date" name="from" min=$from max=$max value=$from></div>
+            <div><b style="font-size:20;">To:</b>  <input type="date" name="to" min=$from max=$max value=$to></div>
+            <button type="submit" class="btn btn-default" name="search"><b>Search</b></button>
+        </div>
+    </form>
+    
     _END;
 
-    $query = "SELECT * FROM room JOIN hotel ON room.hotelID=hotel.id;"; // Select 'all' from 'hotel' table
+    $query = "SELECT * FROM reserve;";
+
+    $result = $conn->query($query);
+
+    if($result->num_rows > 0){
+        $query = "SELECT * FROM (SELECT * FROM room JOIN hotel ON room.hotelID=hotel.id WHERE 
+                LOWER(name) LIKE '%$search%' OR LOWER(type) LIKE '%$search%' OR LOWER(address) LIKE '%$search%')hotel_room
+	            WHERE (hotel_room.id NOT IN (SELECT hotelId FROM reserve) AND hotel_room.roomNum NOT IN (SELECT RoomNum FROM reserve))
+                OR id NOT IN ((SELECT hotelId as Id FROM reserve WHERE StartFrom>='$from' and StartFrom<'$to' or EndTo<='$to' and EndTo>'$from'));";
+    }
+    else{
+        $query = "SELECT * FROM room JOIN hotel ON room.hotelID=hotel.id WHERE 
+            LOWER(name) LIKE '%$search%' OR LOWER(type) LIKE '%$search%' OR LOWER(address) LIKE '%$search%'";
+    }
 
     $result = $conn->query($query);
 
@@ -56,7 +151,7 @@
                 <img value='roomimg' class="col-sm-2" src="img/$row[2].jpg">
                 <div class="col-sm-6" style="margin: auto;">
                     <h2><b>$row[6]</b></h2>
-                    <h5>Address: <b>$row[7]</b></h5>
+                    <a href="http://maps.google.com/maps?q=<?=$row[7]?>"><h5>Address: <b>$row[7]</b></h5></a>
                     <h4>Type: <b>$row[2]</b></h4> 
                     <h4>Room Number: <b>$row[1]</b></h4>
                     <h3 style="color:Green;"><b>$$row[4]</b> <small>PER NIGHT</small></h3>
@@ -78,26 +173,30 @@
                                 Name: $first $last<br>
                                 Username: @$username<br>
                                 Email: $email<br><br>
-                                Adults: <input type="number" name="quantity" min="1" max="5" value=1> 
-                                Children: <input type="number" name="quantity" min="0" max="5" value=0> <br>
-                                From: <input type="date" min=$today max=$max value=$today><br>
-                                To: <input type="date" min=$today max=$max value=$today><br>
+                                Adults: <input type="number" name="adult-quantity" min="1" max="5" value=1> 
+                                Children: <input type="number" name="child-quantity" min="0" max="5" value=0> <br>
                                 Payment: 
                                 <input name="payment" id="payment" list="browsers">
                                 <datalist id="browsers">
                                     <option value="Card Ending w/ 3245">
                                     <option value="Card Ending w/ 5425">
-                                </datalist><br><br>
+                                </datalist><br>
+                                From: $from <br>
+                                To: $to <br><br>
                                 Room and Hotel Information <br>
                                 Hotel: $row[6] <br>
                                 Address: $row[7] <br>
                                 Room Type: $row[2] <br>
                                 Room Number: $row[1] <br>
                                 Price: $$row[4] <br>
+                                <input type="hidden" name="hotelid" value="$row[0]">
+                                <input type="hidden" name="roomnumber" value="$row[1]">
+                                <input type="hidden" name="fromBook" value="$from">
+                                <input type="hidden" name="toBook" value="$to">
                             </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-default" name="addpayment"><b>Confirm & Book</b></button>
+                            <button type="submit" class="btn btn-default" name="book"><b>Confirm & Book</b></button>
                         </div>
                         </div>
                     </form>
