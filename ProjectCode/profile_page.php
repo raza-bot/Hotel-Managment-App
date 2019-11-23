@@ -1,6 +1,7 @@
 <?php
     require_once 'utilities.php';
 
+    $today = date('Y-m-d');
     $userid = $_SESSION["userid"];
 
     if(isset($_POST['addpayment'])){
@@ -34,71 +35,137 @@
     }
 
     echo <<<_END
-    <style>
-    div[title='profile'] {
-        display: inline-block;
-        margin: auto;
-        margin-top: 75px;
-        background-color: #ffffff;
-        border-radius: 20px;
-        box-shadow: 0px 0px 20px 3px #808080;
-        padding: 20px;
-    }
-    
-    div[value='content'] {
-        width: 90%;
-        margin: auto;
-        word-wrap: break-word;
-        background-color: #ffffff;
-        border-radius: 20px;
-        box-shadow: 0px 0px 3px 1px #000000;
-        padding: 20px;
-    }
-    </style>
-        <center>
-            <h1>$first $last</h1><br>
-            <h2>@$username</h2>
-            <h2>Email: $email</h2>
-            <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#addPaymentModal">Add Payment</button>
+    <head>
+        <link href="https://fonts.googleapis.com/css?family=Pacifico&display=swap" rel="stylesheet">
+        <style>
+        input[type=text]{
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 13px;
+        }
+        input[type=number]{
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 13px;
+        }
+        input[type=date]{
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 13px;
+        }
+        input:focus { 
+            outline: none !important;
+            border-color: #719ECE;
+            box-shadow: 0 0 10px #719ECE;
+        }
+        .eff {
+            /* Add shadows to create the "card" effect */
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+            transition: 0.3s;
+          }
+        .eff:hover {
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+        }
+        .card {
+            margin: 30px;
+            padding: 12px;
+            background-color:white;
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+            transition: 0.3s;
+            border-radius: 10px; /* 5px rounded corners */
+        }
+        
+        .card:hover {
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+        }
+        .card2 {
+            margin: 30px;
+            margin-top:340px;
+            padding: 12px;
+            background-color:white;
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+            transition: 0.3s;
+            border-radius: 10px; /* 5px rounded corners */
+        }
+        
+        .card2:hover {
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+        }
+        
+        </style>
+    </head>
+    <div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="card">
+                    <h4 style="text-decoration: underline;"><i>Your Information</i></h4>
+                    <br>
+                    <h4><b>Name: $first $last</b></h4>
+                    <hr>
+                    <h4><b>Username: @$username</b></h3>
+                    <hr>
+                    <h4><b>Email: $email</b></h3>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="card">
+                <h4 style="text-decoration: underline;"><i>Payment Information</i></h4>
+                <br>
     _END;
 
-    displayCards($conn, $userid);
+    if(!displayCards($conn, $userid)){
+        echo <<<_END
+                <center>
+                    <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#addPaymentModal">Add Payment</button>
+                </center>
+            </div>
+            </div>
+        _END;
+    }
 
     echo <<<_END
-        </center>
-    
-    <div id="addPaymentModal" class="modal fade" role="dialog">
-        <div class="modal-dialog">
-            <!-- Modal content-->
-            <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Add Payment</h4>
-            </div>
-            <form action="index.php" method="post">
-                    <div class="modal-body">
-                        <p1>Name On Card: </p1>
-                        <input type="text" name="name" placeholder="Ex: John Doe"><br><br>
-                        <p1>Card Number: </p1>
-                        <input type="number" name="cardnum" placeholder="Ex: 0000000000000000"><br><br>
-                        <p1>CVV: </p1>
-                        <input type="number" name="cvv" placeholder="Ex: 000"><br><br>
-                        <input type="hidden" name="profile-submit">
-                        <p1>Expiration Date: </p1>
-                        <input type="date" name="expire">
-                    </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-default" name="addpayment"><b>Add</b></button>
-                </div>
-                </div>
-            </form>
         </div>
-    </div>
+        <div class="card2">
+            <h4 style="text-decoration: underline;"><i>Reservations</i></h4>
+            <br>
     _END;
 
-    function displayCards($conn, $userid){
-        $query = "SELECT cardNum FROM have WHERE userid=$userid";
+    displayReservation($conn, $userid);
+
+    echo <<<_END
+        </div>
+        <div id="addPaymentModal" class="modal fade" role="dialog">
+            <div class="modal-dialog modal-sm">
+                <!-- Modal content-->
+                <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Add Payment</h4>
+                </div>
+                <form action="index.php" method="post">
+                        <div class="modal-body">
+                            <input type="text" name="name" pattern="^[A-Za-z -]+$" minlength="1" placeholder="Name On Card" required/><br><br>
+                            <input name="cardnum" type="text" pattern="\d*" minlength="16" maxlength="16" placeholder="Card Number" required/><br><br>
+                            <input name="cvv" type="text" pattern="\d*" minlength="3" maxlength="3" placeholder="CVV" required/><br><br>
+                            <input type="hidden" name="profile-submit"/>
+                            <input type="date" name="expire" min='$today' value='$today'/>
+                        </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-default" name="addpayment"><b>Add</b></button>
+                    </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    _END;
+
+    function displayReservation($conn, $userid){
+        $query = "SELECT * FROM (SELECT * FROM reserve JOIN hotel ON reserve.hotelId=hotel.id)reserve_hotel JOIN room ON reserve_hotel.RoomNum=room.roomNum  WHERE customerid=$userid;";
+
         $result = $conn->query($query);
         if($result){
             $rows = $result->num_rows;
@@ -106,32 +173,48 @@
             {
                 $result->data_seek($j);
                 $row = $result->fetch_array(MYSQLI_NUM);
-                $query = "SELECT * FROM Payment WHERE cardNum='$row[0]'";
-                $cardResult = $conn->query($query);
 
-                if($cardResult){
-                    $card = $cardResult->fetch_array(MYSQLI_NUM);
-
-                    $number = cipher($card[1], $card[0], 'd');
-                    $cvv = cipher($card[2], $card[0], 'd');
-                    $number = substr($number, 12);
-
-                    echo <<<_END
-                    <br><br>
-                    <div value='content'>
-                    <b>Name On Card:</b> $card[0]<br><br>
-                    <b>Card Number:</b> ************$number<br><br>
-                    <b>CVV:</b> $cvv<br><br>
-                    <b><i>Expires On: $card[3]</i></b><br>
-                    <center><form action="index.php" method="post">
-                    <input type="hidden" name="delete" value="yes">
-                    <input type="hidden" name="cardNum" value="$card[1]">
-                    <input type="hidden" name="profile-submit"><br>
-                    <input name="del" type="submit" value="DELETE"></form></center>
-                    </div>
-                    _END;
-                }
+                echo <<<_END
+                    <h5><b>Hotel:</b> $row[8]</h5>
+                    <h5><b>Address:</b> $row[9]</h5>
+                    <h5><b>Room Number:</b> $row[11]</h5>
+                    <h5><b>Room Type:</b> $row[12]</h5>
+                    <h5><b>From:</b> $row[3]</h5>
+                    <h5><b>To:</b> $row[4]</h5>
+                    <h5><b>Price:</b> $row[14]</h5>
+                    <hr>
+                _END;
             }
+        }
+        else{
+            echo "No Reservation;";
+        }
+    }
+
+    function displayCards($conn, $userid){
+        try{
+            $card = getCard($conn, $userid);
+
+            $number = cipher($card[1], $card[0], 'd');
+            $cvv = cipher($card[2], $card[0], 'd');
+            $number = substr($number, 12);
+
+            echo <<<_END
+                <h4><b>$card[0]</b></h4>
+                <h5><b>Card Number:</b> ************$number</h5>
+                <h5><b>CVV:</b> $cvv</h5>
+                <h5><i>Expires: $card[3]</i></h5>
+                <center><form action="index.php" method="post">
+                <input type="hidden" name="delete" value="yes">
+                <input type="hidden" name="cardNum" value="$card[1]">
+                <input type="hidden" name="profile-submit"><br>
+                <input name="del" class="btn btn-danger btn-lg eff" type="submit" value="DELETE"></form></center>
+            </div>
+            _END;
+            return true;
+        }
+        catch(Exception $e){
+            return false;
         }
     }
 ?>

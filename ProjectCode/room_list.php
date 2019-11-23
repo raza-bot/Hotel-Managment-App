@@ -63,6 +63,14 @@
                 padding-right:10px;
                 padding-left:8px;
             }
+            .eff {
+                /* Add shadows to create the "card" effect */
+                box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+                transition: 0.3s;
+              }
+            .eff:hover {
+                box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+            }
             div[value='search'] {
                 display: flex;
                 align-items: center;
@@ -167,7 +175,7 @@
             else{
                 echo <<<_END
                     <div class="col-sm-3" align="center" style="margin-top:65;">
-                        <button type="submit" class="btn btn-info btn-lg" data-toggle="modal" data-target="#bookModal$j">Book For <b>$$row[4]</b></button>
+                        <button type="submit" class="btn btn-info btn-lg eff" data-toggle="modal" data-target="#bookModal$j">Book For <b>$$row[4]</b></button>
                     </div>
                 </div>
                 <div id="bookModal$j" class="modal fade" role="dialog">

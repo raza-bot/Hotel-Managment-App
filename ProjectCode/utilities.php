@@ -1,6 +1,26 @@
 <?php
     $payment = null;
-    
+
+    function getCard($conn, $userid){
+        $query = "SELECT cardNum FROM have WHERE userid=$userid";
+        $result = $conn->query($query);
+        if($result){
+            $rows = $result->num_rows;
+            for ($j = $rows - 1; $j >= 0; $j--) 
+            {
+                $result->data_seek($j);
+                $row = $result->fetch_array(MYSQLI_NUM);
+                $query = "SELECT * FROM Payment WHERE cardNum='$row[0]'";
+                $cardResult = $conn->query($query);
+
+                if($cardResult){
+                   return $cardResult->fetch_array(MYSQLI_NUM);
+                }
+            }
+        }
+        throw new Exception("No Card");
+    }
+
     //Sanitizing Functions
     function mysql_entities_fix_string($conn, $string){
         return htmlentities(mysql_fix_string($conn, $string));
