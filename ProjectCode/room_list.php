@@ -63,6 +63,14 @@
                 padding-right:10px;
                 padding-left:8px;
             }
+            .eff {
+                /* Add shadows to create the "card" effect */
+                box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+                transition: 0.3s;
+              }
+            .eff:hover {
+                box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+            }
             div[value='search'] {
                 display: flex;
                 align-items: center;
@@ -156,53 +164,65 @@
                     <h4>Room Number: <b>$row[1]</b></h4>
                     <h3 style="color:Green;"><b>$$row[4]</b> <small>PER NIGHT</small></h3>
                 </div>
-                <div class="col-sm-3" align="center" style="margin-top:65;">
-                    <button type="submit" class="btn btn-info btn-lg" data-toggle="modal" data-target="#bookModal$j">Book For <b>$$row[4]</b></button>
-                </div>
-            </div>
-            <div id="bookModal$j" class="modal fade" role="dialog">
-                <div class="modal-dialog">
-                    <!-- Modal content-->
-                    <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Book Hotel</h4>
-                    </div>
-                    <form action="index.php" method="post">
-                            <div class="modal-body" align='center'>
-                                Name: $first $last<br>
-                                Username: @$username<br>
-                                Email: $email<br><br>
-                                Adults: <input type="number" name="adult-quantity" min="1" max="5" value=1> 
-                                Children: <input type="number" name="child-quantity" min="0" max="5" value=0> <br>
-                                Payment: 
-                                <input name="payment" id="payment" list="browsers">
-                                <datalist id="browsers">
-                                    <option value="Card Ending w/ 3245">
-                                    <option value="Card Ending w/ 5425">
-                                </datalist><br>
-                                From: $from <br>
-                                To: $to <br><br>
-                                Room and Hotel Information <br>
-                                Hotel: $row[6] <br>
-                                Address: $row[7] <br>
-                                Room Type: $row[2] <br>
-                                Room Number: $row[1] <br>
-                                Price: $$row[4] <br>
-                                <input type="hidden" name="hotelid" value="$row[0]">
-                                <input type="hidden" name="roomnumber" value="$row[1]">
-                                <input type="hidden" name="fromBook" value="$from">
-                                <input type="hidden" name="toBook" value="$to">
-                            </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-default" name="book"><b>Confirm & Book</b></button>
-                        </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
             _END;
+            if(!isset($username)){
+                echo <<<_END
+                <div class="col-sm-3" align="center" style="margin-top:80;">
+                    <b style="font-size:20;border: 1px solid #ccc;border-radius: 13px;padding: 12px">Log In To Book</b>
+                </div>
+                _END;
+            }
+            else{
+                echo <<<_END
+                    <div class="col-sm-3" align="center" style="margin-top:65;">
+                        <button type="submit" class="btn btn-info btn-lg eff" data-toggle="modal" data-target="#bookModal$j">Book For <b>$$row[4]</b></button>
+                    </div>
+                </div>
+                <div id="bookModal$j" class="modal fade" role="dialog">
+                    <div class="modal-dialog">
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Book Hotel</h4>
+                        </div>
+                        <form action="index.php" method="post">
+                                <div class="modal-body" align='center'>
+                                    Name: $first $last<br>
+                                    Username: @$username<br>
+                                    Email: $email<br><br>
+                                    Adults: <input type="number" name="adult-quantity" min="1" max="5" value=1> 
+                                    Children: <input type="number" name="child-quantity" min="0" max="5" value=0> <br>
+                                    Payment: 
+                                    <input name="payment" id="payment" list="browsers">
+                                    <datalist id="browsers">
+                                        <option value="Card Ending w/ 3245">
+                                        <option value="Card Ending w/ 5425">
+                                    </datalist><br>
+                                    From: $from <br>
+                                    To: $to <br><br>
+                                    Room and Hotel Information <br>
+                                    Hotel: $row[6] <br>
+                                    Address: $row[7] <br>
+                                    Room Type: $row[2] <br>
+                                    Room Number: $row[1] <br>
+                                    Price: $$row[4] <br>
+                                    <input type="hidden" name="hotelid" value="$row[0]">
+                                    <input type="hidden" name="roomnumber" value="$row[1]">
+                                    <input type="hidden" name="fromBook" value="$from">
+                                    <input type="hidden" name="toBook" value="$to">
+                                </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-default" name="book"><b>Confirm & Book</b></button>
+                            </div>
+                            </div>
+                        </form>
+                    </div>
+                
+                _END;
+            }
+            echo "</div>";
         }
     }
 ?>
