@@ -83,7 +83,6 @@
         }
         .card2 {
             margin: 30px;
-            margin-top:340px;
             padding: 12px;
             background-color:white;
             box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
@@ -200,6 +199,17 @@
             $number = substr($number, 12);
 
             echo <<<_END
+                <style>
+                .card2 {
+                    margin: 30px;
+                    margin-top:340px;
+                    padding: 12px;
+                    background-color:white;
+                    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+                    transition: 0.3s;
+                    border-radius: 10px; /* 5px rounded corners */
+                }
+                </style>
                 <h4><b>$card[0]</b></h4>
                 <h5><b>Card Number:</b> ************$number</h5>
                 <h5><b>CVV:</b> $cvv</h5>

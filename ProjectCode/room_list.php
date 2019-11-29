@@ -6,6 +6,14 @@
     $today = date('Y-m-d');
     $max = date('Y-m-d', strtotime("+6 Months"));
 
+    $cardNumber = "";
+
+    try{
+        $card = getCard($conn, $userid);
+        $cardNumber = substr(cipher($card[1], $card[0], 'd'), 12);
+    }
+    catch(Exception $e){}
+
     $search = "";
     $from = date('Y-m-d');
     $to = date('Y-m-d', strtotime("+5 Days"));
@@ -172,7 +180,7 @@
                 </div>
                 _END;
             }
-            else{
+            else if($cardNumber != ""){
                 echo <<<_END
                     <div class="col-sm-3" align="center" style="margin-top:65;">
                         <button type="submit" class="btn btn-info btn-lg eff" data-toggle="modal" data-target="#bookModal$j">Book For <b>$$row[4]</b></button>
@@ -193,12 +201,7 @@
                                     Email: $email<br><br>
                                     Adults: <input type="number" name="adult-quantity" min="1" max="5" value=1> 
                                     Children: <input type="number" name="child-quantity" min="0" max="5" value=0> <br>
-                                    Payment: 
-                                    <input name="payment" id="payment" list="browsers">
-                                    <datalist id="browsers">
-                                        <option value="Card Ending w/ 3245">
-                                        <option value="Card Ending w/ 5425">
-                                    </datalist><br>
+                                    Payment: Card Ending w/ $cardNumber<br>
                                     From: $from <br>
                                     To: $to <br><br>
                                     Room and Hotel Information <br>
@@ -215,6 +218,33 @@
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                                 <button type="submit" class="btn btn-default" name="book"><b>Confirm & Book</b></button>
+                            </div>
+                            </div>
+                        </form>
+                    </div>
+                
+                _END;
+            }
+            else{
+                echo <<<_END
+                    <div class="col-sm-3" align="center" style="margin-top:65;">
+                        <button type="submit" class="btn btn-info btn-lg eff" data-toggle="modal" data-target="#bookModal$j">Book For <b>$$row[4]</b></button>
+                    </div>
+                </div>
+                <div id="bookModal$j" class="modal fade" role="dialog">
+                    <div class="modal-dialog modal-sm">
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Add Payment to Book</h4>
+                        </div>
+                        <form action="index.php" method="post">
+                                <div class="modal-body" align='center'>
+                                    <h4>Go to Profile and Add Payment Method!</h4>
+                                </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                             </div>
                             </div>
                         </form>
