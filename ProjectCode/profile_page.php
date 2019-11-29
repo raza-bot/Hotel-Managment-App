@@ -26,6 +26,14 @@
         }
     }
 
+    if(isset($_POST['cancel'])){
+        echo 'Helo';
+        $hotelId = $_POST['hotelId'];
+        $roomNum = $_POST['roomNum'];
+        $query = "DELETE FROM reserve WHERE Customerid='$userid' AND hotelId='$hotelId' AND RoomNum='$roomNum';";
+        $conn->query($query);
+    }
+
     if(isset($_POST['del'])){
         $cardNum = $_POST['cardNum'];
         $query = "DELETE FROM Payment WHERE cardNum='$cardNum'";
@@ -163,11 +171,14 @@
     _END;
 
     function displayReservation($conn, $userid){
-        $query = "SELECT * FROM (SELECT * FROM reserve JOIN hotel ON reserve.hotelId=hotel.id)reserve_hotel JOIN room ON reserve_hotel.RoomNum=room.roomNum  WHERE customerid=$userid;";
+        $query = "SELECT * FROM (SELECT * FROM reserve JOIN hotel ON reserve.hotelId=hotel.id)reserve_hotel JOIN room ON reserve_hotel.RoomNum=room.roomNum WHERE customerid=$userid;";
 
         $result = $conn->query($query);
         if($result){
             $rows = $result->num_rows;
+            if($rows < 1){
+                echo "<center><b>No Reservations</b></center><br>";
+            }
             for ($j = $rows - 1; $j >= 0; $j--) 
             {
                 $result->data_seek($j);
@@ -181,12 +192,18 @@
                     <h5><b>From:</b> $row[3]</h5>
                     <h5><b>To:</b> $row[4]</h5>
                     <h5><b>Price:</b> $row[14]</h5>
+                    <center><form method="post">
+                    <input type="hidden" name="delete" value="yes">
+                    <input type="hidden" name="hotelId" value="$row[0]">
+                    <input type="hidden" name="roomNum" value="$row[1]">
+                    <input type="hidden" name="profile-submit">
+                    <input name="cancel" class="btn btn-danger btn-lg eff" type="submit" value="CANCEL"></form></center>
                     <hr>
                 _END;
             }
         }
         else{
-            echo "No Reservation;";
+            echo "No Reservation";
         }
     }
 
