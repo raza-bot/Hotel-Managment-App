@@ -139,12 +139,11 @@
                 login($result, $pass, $conn);
             }
             else{
-                "<script type='text/javascript'>alert(\"Email or Password is Wrong!\");</script></script><noscript>Email or Password is Wrong!</noscript>";
-                throw new Exception("Not Found");
+                echo "<script type='text/javascript'>alert(\"Email or Password is Wrong!\");</script></script><noscript>Email or Password is Wrong!</noscript>";
+                throw new Exception("Something went wrong!");
             }
         }  
         else{
-            "<script type='text/javascript'>alert(\"Email or Password is Wrong!\");</script></script><noscript>Email or Password is Wrong!</noscript>";
             throw new Exception("Not Login");
         }
     }
