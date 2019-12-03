@@ -215,7 +215,6 @@
             <form action="index.php" method="post">
                 <button type="submit" name="profile-submit">Profile</button> 
                 <button type="submit" name="logout-submit">Logout</button>    
-                <button type="submit" name="inventory-submit">Inventory</button>
             </form>
             </div>
         _END;

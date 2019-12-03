@@ -16,9 +16,14 @@
                 if($token == $row[5]){
                     echo <<<_END
                         <!-- Logout -->
-                        <p>Logged in as $row[2] $row[3]!</p>
+                        <h1>Logged in as $row[2] $row[3]!</h1>
                         <form action="admin.php" method="post">
-                            <button type="submit" name="logout-submit">Logout</button>                
+                            <button type="submit" class="mybtn" name="logout-submit">Logout</button> 
+                        </form>
+                        
+                        <form action="index.php" method="post">
+                            <button type="submit" class="mybtn" name="inventory submit">Inventory</button>   
+                            <input type='hidden' name='inventory-submit'>
                         </form>
                         </div>
                     _END;
@@ -83,6 +88,31 @@
       padding-bottom: 20px;
       padding-left: 20px;
     }
+    
+    .mybtn {
+        box-shadow:inset 0px 0px 0px 2px #9fb4f2;
+        background:linear-gradient(to bottom, #7892c2 5%, #476e9e 100%);
+        background-color:#7892c2;
+        border-radius:11px;
+        border:5px solid #4e6096;
+        display:inline-block;
+        cursor:pointer;
+        color:#ffffff;
+        font-family:Arial;
+        font-size:28px;
+        padding:16px 37px;
+        text-decoration:none;
+        text-shadow:0px 1px 0px #283966;
+    }
+    .mybtn:hover {
+        background:linear-gradient(to bottom, #476e9e 5%, #7892c2 100%);
+        background-color:#476e9e;
+    }
+    .mybtn:active {
+        position:relative;
+        top:1px;
+    }
+
 </style>
 
 <body style="margin: 0;">
@@ -114,6 +144,9 @@ _END;
             }
             else if($result->num_rows){
                 login($result, $pass, $conn);
+            }
+            else if(isset($_POST['inventory-submit'])){
+                require "inventory.php";
             }
             else{
                 throw new Exception("Not Found");
