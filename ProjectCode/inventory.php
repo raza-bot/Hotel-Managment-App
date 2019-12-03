@@ -36,7 +36,7 @@
         .form-container {
           max-width: 300px;
           padding: 10px;
-          background-color: white;
+          background-color: #99b4e6;
         }
 
         /* Full-width input fields */
@@ -82,7 +82,7 @@
 
         <button class="open-button" onclick="openForm()">Edit Inventory</button>
         <div class="form-popup" id="myForm">
-          <form action="index.php" class="form-container" method="post">
+          <form action="admin.php" class="form-container" method="post">
             <h1>Edit Iventory</h1>
 
             <label for="id"><b>ID</b></label>
