@@ -172,7 +172,7 @@
                 echo "<tr><td>" . $row[0]. "</td><td>" . $row[1] . "</td><td>" . $row[2] . "</td><td>" . $row[3] . "</td>
                 <td>  
                                                      
-                    <form action='index.php' method='post'>
+                    <form action='admin.php' method='post'>
                             <button type='submit' name='add_btn'>Add One</button>  
                             <button type='submit' name='sub_btn'>Sub One</button>  
                             <input type='hidden' name='inventory-submit'>

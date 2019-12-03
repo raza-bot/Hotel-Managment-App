@@ -75,6 +75,31 @@
                 margin-right: 30px;
                 font-family: Times New Roman;                font-weight: bold;
                 }
+            button[data-target="#signUpModal"] {
+                    height: 100%;
+                    padding: 0 10px;
+                    border: none;
+                    border-radius: 4px;
+                    background-color: #333;
+                    margin-left: 8px;
+                    font-family: arial;
+                    font-size: 13px;
+                    color: #FFF;
+                    text-transform: uppercase;
+                    text-align: center;
+            }
+            input[type="text1"], [type="password"]{
+                width: 100%;
+                padding: 12px;
+                border: 1px solid #ccc;
+                border-radius: 13px;
+                resize: vertical;
+            }
+            input:focus { 
+                outline: none !important;
+                border-color: #719ECE;
+                box-shadow: 0 0 10px #719ECE;
+            }
         </style>
         
         <header style="box-shadow: 0px 0px 10px 3px #080808;width: auto;">
@@ -134,35 +159,49 @@
                 <input type="text" name="mailuid" placeholder="Username/Email">
                 <input type="password" name="pwd" placeholder="Password">
                 <button type="submit" name="login-submit">Login</button>
-                <button type="submit" name="signup-submit">Sign Up</button> 
-                <a href="admin.php">Admin</a>
             </form>   
+            <button data-toggle="modal" data-target="#signUpModal">Sign Up</button> 
+            <form action="admin.php" method="post">
+                <button type="submit">Admin</button>
+            </form>
             </div>
         _END;
         }
     }
     
-    echo "</header></body>";
+    echo <<<_END
+        </header>
+        </body>
+        <div id="signUpModal" class="modal fade" role="dialog">
+            <div class="modal-dialog modal-sm">
+                <!-- Modal content-->
+                <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Sign Up</h4>
+                </div>
+                <form action="index.php" method="post">
+                    <div class="modal-body">
+                        <input type="text1" name="first" placeholder="First Name"><br><br>
+                        <input type="text1" name="last" placeholder="Last Name"><br><br>
+                        <input type="text1" name="username" placeholder="Username"><br><br>
+                        <input type="text1" name="mailuid" placeholder="Email"><br><br>
+                        <input type="password" name="pwd" placeholder="Password"><br><br>       
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-default" name="SignUp"><b>Sign Up</b></button>
+                    </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    _END;
 
     
 
     //Display Sign up if user wants to signup
-    if(isset($_POST['signup-submit'])){
-        echo <<<_END
-        <!-- Logout -->
-        <body>
-        <form action="index.php" method="post">
-            <input type="text" name="first" placeholder="First Name">
-            <input type="text" name="last" placeholder="Last Name">
-            <input type="text" name="username" placeholder="Username">
-            <input type="text" name="mailuid" placeholder="Email">
-            <input type="password" name="pwd" placeholder="Password">
-            <button type="submit" name="SignUp">Sign Up</button>                
-        </form>
-        </body>
-    _END;
-    }
-    else if(isset($_POST['hotel'])){
+    if(isset($_POST['hotel'])){
         require "hotel_list.php";
     }
     else if(isset($_POST['contact'])){
@@ -170,9 +209,6 @@
     }
     else if(isset($_POST['profile-submit'])){
         require "profile_page.php";
-    }
-    else if(isset($_POST['inventory-submit'])){
-        require "inventory.php";
     }
     else{
         require  "room_list.php";
