@@ -8,18 +8,11 @@
     body, html {height: 100%}
     .bgimg {
       background-image: url('img/sunset.jpg');
-      min-height: 100%;
+      min-height: auto;
       background-position: center;
       background-size: cover;
       height: 100vh;    
     }
-
-     div {
-      padding-top: 20px;
-      padding-right: 20px;
-      padding-bottom: 20px;
-      padding-left: 20px;
-    }   
 </style>
 
 <body style="margin: 0;">
@@ -27,10 +20,11 @@
 <body>
     <div class="bgimg">
 
-      <div class="topleft">
-       <p style = "color: white; font-size: 48px">
+      <div class="topleft" align="center">
+        <br>
+       <b><p style = "color: white; font-size: 48px">
            Hotel Mangement System
-       </p>
+       </p></b>
       </div>
 
       <div class="middle" align="center" style = "color:white">
