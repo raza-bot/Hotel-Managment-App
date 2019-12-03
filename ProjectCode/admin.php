@@ -10,13 +10,13 @@
         destroy_session_and_data();
     }
 
-    if(isset($_SESSION['token'])){
-        $username = $_SESSION['username'];
-        $email = $_SESSION['email'];
-        $userid = $_SESSION['userid'];
-        $first = $_SESSION['firstname'];
-        $last = $_SESSION['lastname'];
-        $token = $_SESSION['token'];
+    if(isset($_SESSION['tokenA'])){
+        $username = $_SESSION['usernameA'];
+        $email = $_SESSION['emailA'];
+        $userid = $_SESSION['useridA'];
+        $first = $_SESSION['firstnameA'];
+        $last = $_SESSION['lastnameA'];
+        $token = $_SESSION['tokenA'];
     }
 
     //Logs user in using MySQL
@@ -29,12 +29,12 @@
             if($result->num_rows){
                 $token = hash('ripemd128', $pass);
                 if($token == $row[5]){
-                    $_SESSION['username'] = $row[1];
-                    $_SESSION['email'] = $row[4];
-                    $_SESSION['userid'] = $row[0];
-                    $_SESSION['firstname'] = $row[2];
-                    $_SESSION['lastname'] = $row[3];
-                    $_SESSION['token'] = $token;
+                    $_SESSION['usernameA'] = $row[1];
+                    $_SESSION['emailA'] = $row[4];
+                    $_SESSION['useridA'] = $row[0];
+                    $_SESSION['firstnameA'] = $row[2];
+                    $_SESSION['lastnameA'] = $row[3];
+                    $_SESSION['tokenA'] = $token;
                     displayLoggedIn($row[2], $row[3]);
                     header("Location: #");
                 }
@@ -175,11 +175,14 @@ _END;
         }
         else if(isset($_POST['login-submit'])){
             //Sanitizing
+            
             $userOrEmail = mysql_entities_fix_string($conn, $_POST['mailuid']);
             $pass = mysql_entities_fix_string($conn, $_POST['pwd']);
 
             $query = "SELECT * FROM User WHERE email='$userOrEmail' OR userName='$userOrEmail'";
             $result= $conn->query($query);
+
+            echo "Hello";
 
             if (!$result) { 
                 echo "<script type='text/javascript'>alert(\"Email or Password is Wrong!\");</script></script><noscript>Email or Password is Wrong!</noscript>";
