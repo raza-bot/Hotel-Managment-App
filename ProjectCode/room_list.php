@@ -215,6 +215,7 @@
                                     <input type="hidden" name="roomnumber" value="$row[1]">
                                     <input type="hidden" name="fromBook" value="$from">
                                     <input type="hidden" name="toBook" value="$to">
+                                    <input type="hidden" name="payment" value="$cardNumber">
                                 </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
