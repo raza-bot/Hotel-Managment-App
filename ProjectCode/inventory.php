@@ -83,7 +83,7 @@
         <button class="open-button" onclick="openForm()">Edit Inventory</button>
         <div class="form-popup" id="myForm">
           <form action="index.php" class="form-container" method="post">
-            <h1>Add New Item</h1>
+            <h1>Edit Iventory</h1>
 
             <label for="id"><b>ID</b></label>
             <input type="text" placeholder="Enter ID" name="id" required>
