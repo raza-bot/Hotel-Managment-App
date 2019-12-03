@@ -129,9 +129,6 @@
 
                 $result = $conn->query($query);
 
-                if(!$result){
-                    echo "Yikes";   
-                }
             }
 
             if(isset($_POST['delInfo'])) {
