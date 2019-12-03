@@ -4,29 +4,39 @@
     $conn = new mysqli($hn, $un, $pw, $db);
     if ($conn->connect_error) die($conn->connect_error);
 
+    session_start();
+
+    if(isset($_POST['logout-submit'])){
+        destroy_session_and_data();
+    }
+
+    if(isset($_SESSION['token'])){
+        $username = $_SESSION['username'];
+        $email = $_SESSION['email'];
+        $userid = $_SESSION['userid'];
+        $first = $_SESSION['firstname'];
+        $last = $_SESSION['lastname'];
+        $token = $_SESSION['token'];
+    }
+
     //Logs user in using MySQL
     function login($result, $pass, $conn){
         if($result->num_rows){
             $row = $result->fetch_array(MYSQLI_NUM);
             $result->close();
-            $query = "SELECT * FROM Employee WHERE userId='$row[0]'";
+            $query = "SELECT * FROM employee WHERE userId='$row[0]'";
             $result = $conn->query($query);
             if($result->num_rows){
                 $token = hash('ripemd128', $pass);
                 if($token == $row[5]){
-                    echo <<<_END
-                        <!-- Logout -->
-                        <h1>Logged in as $row[2] $row[3]!</h1>
-                        <form action="admin.php" method="post">
-                            <button type="submit" class="mybtn" name="logout-submit">Logout</button> 
-                        </form>
-                        
-                        <form action="index.php" method="post">
-                            <button type="submit" class="mybtn" name="inventory submit">Inventory</button>   
-                            <input type='hidden' name='inventory-submit'>
-                        </form>
-                        </div>
-                    _END;
+                    $_SESSION['username'] = $row[1];
+                    $_SESSION['email'] = $row[4];
+                    $_SESSION['userid'] = $row[0];
+                    $_SESSION['firstname'] = $row[2];
+                    $_SESSION['lastname'] = $row[3];
+                    $_SESSION['token'] = $token;
+                    displayLoggedIn($row[2], $row[3]);
+                    header("Location: #");
                 }
                 else{
                     throw new Exception("Wrong Pass");
@@ -60,7 +70,11 @@
                     $row = $result->fetch_array(MYSQLI_NUM);
                     $result->close();
                     $admin = isset($_POST['admin']);
-                    $query = "INSERT INTO Employee(userId, isAdmin, salary) VALUES ('$row[0]', '$admin', 0)";
+                    $salary = rand(40000, 90000);
+                    if($admin){
+                        $salary = rand(80000, 140000);
+                    }
+                    $query = "INSERT INTO Employee(userId, isAdmin, salary) VALUES ('$row[0]', '$admin', '$salary')";
                     $result = $conn->query($query);
                 }
             }
@@ -72,11 +86,13 @@
 <title>Admin Page</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
+<head>
+<link href="https://fonts.googleapis.com/css?family=Pacifico&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
 <style> 
     body, html {height: 100%}
     .bgimg {
-      background-image: url('img/sunset.jpg');
+      background-image: url('img/hotel_img.png');
       min-height: 100%;
       background-position: center;
       background-size: cover;
@@ -113,8 +129,22 @@
         top:1px;
     }
 
-</style>
+    input[type="text"], [type="password"]{
+        width: auto;
+        color: black;
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 13px;
+        resize: vertical;
+    }
+    input:focus { 
+        outline: none !important;
+        border-color: #719ECE;
+        box-shadow: 0 0 10px #719ECE;
+    }
 
+</style>
+</head>
 <body style="margin: 0;">
 
 <body>
@@ -130,7 +160,20 @@
 _END;
     //Display Logout if signed in
     try{
-        if(isset($_POST['login-submit'])){
+        if(isset($_POST['inventory-submit'])){
+            echo <<<_END
+                <div style='background-color: white;'>
+                <form action="admin.php" method="post">
+                    <button class="btn btn-danger" type="submit" name="SignUp">Back</button>
+                </form>
+            _END;
+            require "inventory.php";
+            echo "</div>";
+        }
+        else if(isset($token)){
+            displayLoggedIn($first, $last);
+        }
+        else if(isset($_POST['login-submit'])){
             //Sanitizing
             $userOrEmail = mysql_entities_fix_string($conn, $_POST['mailuid']);
             $pass = mysql_entities_fix_string($conn, $_POST['pwd']);
@@ -159,14 +202,14 @@ _END;
             </font>
             <hr style="width:50%">
             <form action="admin.php" method="post">
-                <input type="text" name="first" placeholder="First Name">
-                <input type="text" name="last" placeholder="Last Name">
-                <input type="text" name="username" placeholder="Username">
-                <input type="text" name="mailuid" placeholder="Email">
-                <input type="password" name="pwd" placeholder="Password">
+                <input type="text" name="first" placeholder="First Name"><br>
+                <input type="text" name="last" placeholder="Last Name"><br>
+                <input type="text" name="username" placeholder="Username"><br>
+                <input type="text" name="mailuid" placeholder="Email"><br>
+                <input type="password" name="pwd" placeholder="Password"><br>
                 <input type="checkbox" name="admin" value="Admin">Is Admin?<br>
-                <button type="submit" name="SignUp">Sign Up</button>    
-                <button type="submit" name="backtologin">Log In</button>            
+                <button class="btn btn-default" type="submit" name="SignUp">Sign Up</button>    
+                <button class="btn btn-default" type="submit" name="backtologin">Log In</button>            
             </form>
             _END;
         }
@@ -182,14 +225,33 @@ _END;
         </font>
         <hr style="width:50%">
         <form action="admin.php" method="post">
-            <input type="text" name="mailuid" placeholder="Username/Email">
-            <input type="password" name="pwd" placeholder="Password">
-            <button type="submit" name="login-submit">Login</button>
-            <button type="submit" name="signup-submit">Sign Up</button>
-            <a href="index.php">Back</a>
+            <input type="text" name="mailuid" placeholder="Username/Email"><br>
+            <input type="password" name="pwd" placeholder="Password"><br><br>
+            <button type="submit" class="btn btn-default" name="login-submit">Login</button>
+            <button type="submit" class="btn btn-default" name="signup-submit">Sign Up</button><br>
         </form>   
+        <form action="index.php" method="post">
+            <button type="submit" class="btn btn-danger">Back</button>
+        </form>
         </div>
     _END;
     }
-    echo "</div></div></body></html>"
+    echo "</div></div></body></html>";
+
+
+    function displayLoggedIn($first, $last){
+        echo <<<_END
+                <!-- Logout -->
+                <h1>Logged in as $first $last!</h1>
+                <form action="admin.php" method="post">
+                    <button type="submit" class="mybtn" name="logout-submit">Logout</button> 
+                </form>
+                
+                <form action="admin.php" method="post">
+                    <button type="submit" class="mybtn" name="inventory submit">Inventory</button>   
+                    <input type='hidden' name='inventory-submit'>
+                </form>
+                </div>
+        _END;
+    }
 ?>

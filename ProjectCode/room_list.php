@@ -9,6 +9,7 @@
     $cardNumber = "";
 
     try{
+        if(!isset($userid)) {throw new Exception("Not Logged In");}
         $card = getCard($conn, $userid);
         $cardNumber = substr(cipher($card[1], $card[0], 'd'), 12);
     }
