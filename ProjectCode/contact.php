@@ -28,7 +28,7 @@
     <div class="bgimg">
 
       <div class="topleft">
-       <p style = "color: white; font-size: 36px">
+       <p style = "color: white; font-size: 48px">
            Hotel Mangement System
        </p>
       </div>
@@ -40,11 +40,14 @@
         <hr style="width:50%">
         <font size = "6">
             <br>
-            Raza Ghulam
+           Bronsin Benyamin Pouran
             <br><br>
             Kevin Pham
             <br><br>
-            Bronsin Benyamin Pouran
+            Raza Ghulam
+            <br><br>
+            Sweeney Hall 100, San Jose State University
+            <br><br>
         </font>
       </div>
       
