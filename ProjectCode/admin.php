@@ -17,44 +17,27 @@
         $first = $_SESSION['firstnameA'];
         $last = $_SESSION['lastnameA'];
         $token = $_SESSION['tokenA'];
+        $hotelId = $_SESSION['hotelId'];
     }
 
-    //Logs user in using MySQL
-    function login($result, $pass, $conn){
-        if($result->num_rows){
-            $row = $result->fetch_array(MYSQLI_NUM);
-            $result->close();
-            $query = "SELECT * FROM employee WHERE userId='$row[0]'";
-            $result = $conn->query($query);
-            if($result->num_rows){
-                $token = hash('ripemd128', $pass);
-                if($token == $row[5]){
-                    $_SESSION['usernameA'] = $row[1];
-                    $_SESSION['emailA'] = $row[4];
-                    $_SESSION['useridA'] = $row[0];
-                    $_SESSION['firstnameA'] = $row[2];
-                    $_SESSION['lastnameA'] = $row[3];
-                    $_SESSION['tokenA'] = $token;
-                    displayLoggedIn($row[2], $row[3]);
-                    header("Location: #");
-                }
-                else{
-                    throw new Exception("Wrong Pass");
-                }
-            }
-            else{
-                throw new Exception("Not Customer");
-            }
-        }
+    if(isset($_POST['addroom'])){
+        $number = mysql_entities_fix_string($conn, $_POST['number']);
+        $price = mysql_entities_fix_string($conn, $_POST['price']);
+        $type = $_POST['type'];
+
+        $query = "INSERT INTO room(hotelID, roomNum, type, status, price) VALUES('$hotelId', '$number', '$type', 0, '$price');";
+        $conn->query($query);
     }
 
     if(isset($_POST['SignUp'])){
-        if(isset($_POST['mailuid']) && isset($_POST['username']) && isset($_POST['pwd']) && isset($_POST['first'])&& isset($_POST['last'])){
+        if(isset($_POST['hotel']) && isset($_POST['mailuid']) && isset($_POST['username']) && isset($_POST['pwd']) && isset($_POST['first'])&& isset($_POST['last'])){
             $username = mysql_entities_fix_string($conn, $_POST['username']);
             $pass = mysql_entities_fix_string($conn, $_POST['pwd']);
             $email = mysql_entities_fix_string($conn, $_POST['mailuid']);
             $first = mysql_entities_fix_string($conn, $_POST['first']);
             $last = mysql_entities_fix_string($conn, $_POST['last']);
+
+            $hotelId = explode("ID: ",$_POST['hotel'])[1];
     
             $token = hash('ripemd128', $pass);
     
@@ -76,6 +59,8 @@
                     }
                     $query = "INSERT INTO Employee(userId, isAdmin, salary) VALUES ('$row[0]', '$admin', '$salary')";
                     $result = $conn->query($query);
+                    $query = "INSERT INTO has(hotelID, userID) VALUES ('$hotelId', '$row[0]')";
+                    $result = $conn->query($query);
                 }
             }
         }    
@@ -86,6 +71,8 @@
 <title>Admin Page</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
 <head>
 <link href="https://fonts.googleapis.com/css?family=Pacifico&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
@@ -104,32 +91,8 @@
       padding-bottom: 20px;
       padding-left: 20px;
     }
-    
-    .mybtn {
-        box-shadow:inset 0px 0px 0px 2px #9fb4f2;
-        background:linear-gradient(to bottom, #7892c2 5%, #476e9e 100%);
-        background-color:#7892c2;
-        border-radius:11px;
-        border:5px solid #4e6096;
-        display:inline-block;
-        cursor:pointer;
-        color:#ffffff;
-        font-family:Arial;
-        font-size:28px;
-        padding:16px 37px;
-        text-decoration:none;
-        text-shadow:0px 1px 0px #283966;
-    }
-    .mybtn:hover {
-        background:linear-gradient(to bottom, #476e9e 5%, #7892c2 100%);
-        background-color:#476e9e;
-    }
-    .mybtn:active {
-        position:relative;
-        top:1px;
-    }
 
-    input[type="text"], [type="password"]{
+    input[type="text"], [type="password"], [type="number"]{
         width: auto;
         color: black;
         padding: 12px;
@@ -143,10 +106,50 @@
         box-shadow: 0 0 10px #719ECE;
     }
 
+    select{
+        width: auto;
+        color: black;
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 13px;
+        resize: vertical;
+    }
+    select:focus { 
+        outline: none !important;
+        border-color: #719ECE;
+        box-shadow: 0 0 10px #719ECE;
+    }
+
+    div[value='content'] {
+        margin: 20;
+        opacity: 90%;
+        word-wrap: break-word;
+        background-color: #ffffff;
+        border-radius: 20px;
+        box-shadow: 0px 0px 3px 1px #000000;
+        padding-top: 20px;
+        padding-bottom: 20px;
+        padding-right:10px;
+        padding-left:8px;
+    }
+    .eff {
+        /* Add shadows to create the "card" effect */
+        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+        transition: 0.3s;
+      }
+    .eff:hover {
+        box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+    }
+    img[value='roomimg']{
+        width: 300px;
+        height: 200px;
+        object-fit: cover;
+        border-radius: 8%;
+    }
+
 </style>
 </head>
-<body style="margin: 0;">
-
+<body>
 <body>
     <div class="bgimg">
 
@@ -171,7 +174,7 @@ _END;
             echo "</div>";
         }
         else if(isset($token)){
-            displayLoggedIn($first, $last);
+            displayLoggedIn($conn, $userid, $first, $last);
         }
         else if(isset($_POST['login-submit'])){
             //Sanitizing
@@ -182,9 +185,8 @@ _END;
             $query = "SELECT * FROM User WHERE email='$userOrEmail' OR userName='$userOrEmail'";
             $result= $conn->query($query);
 
-            echo "Hello";
-
             if (!$result) { 
+                echo "hotel";
                 echo "<script type='text/javascript'>alert(\"Email or Password is Wrong!\");</script></script><noscript>Email or Password is Wrong!</noscript>";
                 throw new Exception("Not Found");
             }
@@ -210,6 +212,11 @@ _END;
                 <input type="text" name="username" placeholder="Username"><br>
                 <input type="text" name="mailuid" placeholder="Email"><br>
                 <input type="password" name="pwd" placeholder="Password"><br>
+                <select name="hotel">
+            _END;
+            loadHotels($conn);
+            echo <<<_END
+                </select><br>
                 <input type="checkbox" name="admin" value="Admin">Is Admin?<br>
                 <button class="btn btn-default" type="submit" name="SignUp">Sign Up</button>    
                 <button class="btn btn-default" type="submit" name="backtologin">Log In</button>            
@@ -241,20 +248,133 @@ _END;
     }
     echo "</div></div></body></html>";
 
+    //Logs user in using MySQL
+    function login($result, $pass, $conn){
+        if($result->num_rows){
+            $row = $result->fetch_array(MYSQLI_NUM);
+            $result->close();
+            $query = "SELECT * FROM employee WHERE userId='$row[0]'";
+            $result = $conn->query($query);
+            if($result->num_rows){
+                $token = hash('ripemd128', $pass);
+                if($token == $row[5]){
+                    $query = "SELECT hotelID FROM has WHERE userID='$row[0]';";
+                    $result = $conn->query($query);
+                    if(!$result){
+                        throw new Exception("Wrong Pass");
+                    }
+                    $hotelId = $result->fetch_array(MYSQLI_NUM)[0];
+                    $_SESSION['usernameA'] = $row[1];
+                    $_SESSION['emailA'] = $row[4];
+                    $_SESSION['useridA'] = $row[0];
+                    $_SESSION['firstnameA'] = $row[2];
+                    $_SESSION['lastnameA'] = $row[3];
+                    $_SESSION['tokenA'] = $token;
+                    $_SESSION['hotelId'] = $hotelId;
+                    displayLoggedIn($conn, $row[0], $row[2], $row[3]);
+                }
+                else{
+                    throw new Exception("Wrong Pass");
+                }
+            }
+            else{
+                throw new Exception("Not Admin");
+            }
+        }
+    }
 
-    function displayLoggedIn($first, $last){
+    function displayLoggedIn($conn, $userid, $first, $last){
         echo <<<_END
-                <!-- Logout -->
-                <h1>Logged in as $first $last!</h1>
-                <form action="admin.php" method="post">
-                    <button type="submit" class="mybtn" name="logout-submit">Logout</button> 
-                </form>
-                
-                <form action="admin.php" method="post">
-                    <button type="submit" class="mybtn" name="inventory submit">Inventory</button>   
-                    <input type='hidden' name='inventory-submit'>
-                </form>
+            <!-- Logout -->
+            <h1>Logged in as $first $last!</h1>
+            <form action="admin.php" method="post">
+                <button type="submit" class="btn btn-danger btn-lg eff" name="logout-submit">Logout</button> 
+            </form>
+            
+            <form action="admin.php" method="post">
+                <button type="submit" class="btn btn-info btn-lg eff" name="inventory submit">Inventory</button>   
+                <input type='hidden' name='inventory-submit'>
+            </form>
+            <div id="addRoomModal" class="modal fade" role="dialog">
+                <div class="modal-dialog modal-sm">
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Add Payment</h4>
+                    </div>
+                    <form action="admin.php" method="post">
+                            <div class="modal-body">
+                                <input name="number" type="number" placeholder="Room Number" required/><br><br>
+                                <input name="price" type="text" pattern="(\d+\.\d{1,2})" placeholder="Price" required/><br><br>
+                                <select name="type" placeholder="Type" required/>
+                                    <option value='Single'>Single</option>
+                                    <option value='Double'>Double</option>
+                                    <option value='Triple'>Triple</option>
+                                    <option value='Regular'>Regular</option>
+                                    <option value='Suite'>Suite</option>
+                                </select><br><br>
+                            </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-default" name="addroom"><b>Add</b></button>
+                        </div>
+                        </div>
+                    </form>
                 </div>
+            </div>
+            <button type="submit" class="btn btn-info btn-lg eff" data-toggle="modal" data-target="#addRoomModal">Add Room</b></button>
+            </div>
         _END;
+
+        $query = "SELECT * FROM (SELECT * FROM room JOIN hotel ON id=hotelID)hotel_room 
+                    JOIN has ON hotel_room.hotelID=has.hotelID 
+                    WHERE userID='$userid';";
+
+        $result = $conn->query($query);
+
+        if(!$result){
+
+        }
+        else{
+            $rows = $result->num_rows;
+        for ($j = 0; $j < $rows; $j++)  // Go through each row
+            {
+                $result->data_seek($j);     // Get data from row
+                $row = $result->fetch_array(MYSQLI_NUM);    // Put row data into array
+
+                echo <<<_END
+                <div value='content' class="row">
+                    <img value='roomimg' class="col-sm-2" src="img/$row[2].jpg">
+                    <div class="col-sm-6" style="margin: auto;">
+                        <h2><b>$row[6]</b></h2>
+                        <a href="http://maps.google.com/maps?q=<?=$row[7]?>"><h5>Address: <b>$row[7]</b></h5></a>
+                        <h4>Type: <b>$row[2]</b></h4> 
+                        <h4>Room Number: <b>$row[1]</b></h4>
+                        <h3 style="color:Green;"><b>$$row[4]</b> <small>PER NIGHT</small></h3>
+                    </div>
+                </div>
+                _END;
+            }
+        }
+    }
+
+    function loadHotels($conn){
+        $query = "SELECT id, name FROM hotel";
+        $result = $conn->query($query);
+        if(!$result){
+            echo "<option value='none'>N/A</option>";
+        }
+
+        if($result->num_rows){
+            $rows = $result->num_rows;
+            for ($j = 0; $j < $rows; $j++)  // Go through each row
+            {
+                $result->data_seek($j);     // Get data from row
+                $row = $result->fetch_array(MYSQLI_NUM);    // Put row data into array
+                $val = "$row[1] ID: $row[0]";
+                echo "<option value='$val'>$val</option>";
+            }
+        }
     }
 ?>
