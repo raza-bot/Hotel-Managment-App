@@ -20,6 +20,13 @@
         $hotelId = $_SESSION['hotelId'];
     }
 
+    if(isset($_POST['delete'])){
+        $number = $_POST['number'];
+
+        $query = "DELETE FROM room WHERE roomNum='$number' AND hotelID='$hotelId';";
+        $conn->query($query);
+    }
+
     if(isset($_POST['addroom'])){
         $number = mysql_entities_fix_string($conn, $_POST['number']);
         $price = mysql_entities_fix_string($conn, $_POST['price']);
@@ -27,6 +34,19 @@
 
         $query = "INSERT INTO room(hotelID, roomNum, type, status, price) VALUES('$hotelId', '$number', '$type', 0, '$price');";
         $conn->query($query);
+    }
+
+    if(isset($_POST['updateroom'])){
+        $number = mysql_entities_fix_string($conn, $_POST['number']);
+        $price = mysql_entities_fix_string($conn, $_POST['price']);
+        if(isset($_POST['status'])){
+            $query = "UPDATE room SET status=true, price='$price' WHERE hotelID='$hotelId' AND roomNum='$number';";
+            $conn->query($query);
+        }
+        else{
+            $query = "UPDATE room SET status=false, price='$price' WHERE hotelID='$hotelId' AND roomNum='$number';";
+            $conn->query($query);
+        }
     }
 
     if(isset($_POST['SignUp'])){
@@ -141,8 +161,8 @@
         box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
     }
     img[value='roomimg']{
-        width: 300px;
-        height: 200px;
+        width: 310px;
+        height: 225px;
         object-fit: cover;
         border-radius: 8%;
     }
@@ -219,7 +239,7 @@ _END;
                 </select><br>
                 <input type="checkbox" name="admin" value="Admin">Is Admin?<br>
                 <button class="btn btn-default" type="submit" name="SignUp">Sign Up</button>    
-                <button class="btn btn-default" type="submit" name="backtologin">Log In</button>            
+                <button class="btn btn-default btn-danger" type="submit" name="backtologin">Back</button>            
             </form>
             _END;
         }
@@ -286,7 +306,7 @@ _END;
     function displayLoggedIn($conn, $userid, $first, $last){
         echo <<<_END
             <!-- Logout -->
-            <h1>Logged in as $first $last!</h1>
+            <h1>Welcome $first $last!</h1>
             <form action="admin.php" method="post">
                 <button type="submit" class="btn btn-danger btn-lg eff" name="logout-submit">Logout</button> 
             </form>
@@ -352,6 +372,42 @@ _END;
                         <h4>Type: <b>$row[2]</b></h4> 
                         <h4>Room Number: <b>$row[1]</b></h4>
                         <h3 style="color:Green;"><b>$$row[4]</b> <small>PER NIGHT</small></h3>
+                    </div>
+                    <div class="col-sm-3" align="center" style="margin-top:45;">
+                        <button type="submit" class="btn btn-warning btn-lg eff" data-toggle="modal" data-target="#editRoomModal$j">EDIT</b></button>
+                        <form action="admin.php" method="post">
+                            <input name="number" type="hidden" value='$row[1]'><br>
+                            <button name="delete" type="submit" class="btn btn-danger btn-lg eff">DELETE</b></button>
+                        </form>
+                    </div>
+                </div>
+                <div id="editRoomModal$j" class="modal fade" role="dialog">
+                    <div class="modal-dialog modal-sm">
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Edit Room</h4>
+                        </div>
+                        <form action="admin.php" method="post">
+                                <div class="modal-body">
+                                    <input name="number" type="hidden" value='$row[1]'>
+                                    <input name="price" type="text" pattern="(\d+\.\d{1,2})" placeholder="Price" value='$row[4]' required/><br><br>
+                _END;
+                                    if($row[3] == 0){
+                                        echo "<input name='status' type='checkbox' value='true'>Status?<br>";
+                                    }
+                                    else{
+                                        echo "<input name='status' type='checkbox' value='true' checked>Status?<br>";
+                                    }
+                echo <<<_END
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-default" name="updateroom"><b>Edit</b></button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
                 _END;

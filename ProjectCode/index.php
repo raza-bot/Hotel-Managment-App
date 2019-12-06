@@ -111,7 +111,7 @@
                 <!-- Access buttons on top of page --> 
                 <ul>
                 <form action="index.php" method="post">
-                    <li><button type="submit1" name="room">Home</a></li>
+                    <li><button style="margin-left:25px;" type="submit1" name="room">Home</button></li>
                     <li><button type="submit2" name="hotel">Hotels</button></li>
                     <li><button type="submit3" name="contact">Contact</button></li>                     
                 </form>
