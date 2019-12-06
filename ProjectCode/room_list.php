@@ -126,10 +126,10 @@
     </div>
     <form action="index.php" method="post">
         <div value='search' class="row">
-            <input type="text" placeholder="Search e.g. Hotel, Room Type, Address" name="searchtext">
+            <input class="" type="text" placeholder="Search e.g. Hotel, Room Type, Address" name="searchtext">
             <div><b style="font-size:20;">From:</b>  <input type="date" name="from" min=$from max=$max value=$from></div>
             <div><b style="font-size:20;">To:</b>  <input type="date" name="to" min=$from max=$max value=$to></div>
-            <button type="submit" class="btn btn-default" name="search"><b>Search</b></button>
+            <button type="submit" class="btn btn-info eff" name="search"><b>Search</b></button>
         </div>
     </form>
     
@@ -140,14 +140,14 @@
     $result = $conn->query($query);
 
     if($result->num_rows > 0){
-        $query = "SELECT * FROM (SELECT * FROM room JOIN hotel ON room.hotelID=hotel.id WHERE 
-                LOWER(name) LIKE '%$search%' OR LOWER(type) LIKE '%$search%' OR LOWER(address) LIKE '%$search%')hotel_room
-	            WHERE (hotel_room.id NOT IN (SELECT hotelId FROM reserve) AND hotel_room.roomNum NOT IN (SELECT RoomNum FROM reserve))
+        $query = "SELECT * FROM (SELECT * FROM room JOIN hotel ON room.hotelID=hotel.id WHERE status=false AND
+                (LOWER(name) LIKE '%$search%' OR LOWER(type) LIKE '%$search%' OR LOWER(address) LIKE '%$search%'))hotel_room
+	            WHERE status='1' AND (hotel_room.id NOT IN (SELECT hotelId FROM reserve) AND hotel_room.roomNum NOT IN (SELECT RoomNum FROM reserve))
                 OR id NOT IN ((SELECT hotelId as Id FROM reserve WHERE StartFrom>='$from' and StartFrom<'$to' or EndTo<='$to' and EndTo>'$from'));";
     }
     else{
-        $query = "SELECT * FROM room JOIN hotel ON room.hotelID=hotel.id WHERE 
-            LOWER(name) LIKE '%$search%' OR LOWER(type) LIKE '%$search%' OR LOWER(address) LIKE '%$search%'";
+        $query = "SELECT * FROM room JOIN hotel ON room.hotelID=hotel.id WHERE status=false AND
+            (LOWER(name) LIKE '%$search%' OR LOWER(type) LIKE '%$search%' OR LOWER(address) LIKE '%$search%')";
     }
 
     $result = $conn->query($query);
@@ -177,7 +177,7 @@
             if(!isset($username)){
                 echo <<<_END
                 <div class="col-sm-3" align="center" style="margin-top:80;">
-                    <b style="font-size:20;border: 1px solid #ccc;border-radius: 13px;padding: 12px">Log In To Book</b>
+                    <b class="eff" style="font-size:20;border: 1px solid #ccc;border-radius: 13px;padding: 12px">Log In To Book</b>
                 </div>
                 _END;
             }
